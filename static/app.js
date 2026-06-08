@@ -55,13 +55,18 @@ async function loadCriteres() {
 
 function buildForm(data) {
     const container = document.getElementById("form-container");
-    container.innerHTML = ""; // clear the loading message
+    container.innerHTML = "";
 
-    // Loop through each family (e.g. "Localisation", "Structure"…)
     data.familles.forEach(famille => {
         const section = buildFamilySection(famille);
         container.appendChild(section);
     });
+
+    // Apply conditions and auto-completions once the form is built,
+    // then start listening for changes
+    applyConditions();
+    applyAutoCompletions();
+    attachChangeListeners();
 }
 
 
@@ -226,7 +231,6 @@ function buildSelectInput(critere) {
 
 
 function buildNoteInput(critere) {
-    // <select> with values 1 to 5, using note_labels from the JSON
     const select = document.createElement("select");
     select.id = critere.id;
     select.name = critere.id;
@@ -234,21 +238,149 @@ function buildNoteInput(critere) {
 
     const noteLabels = window.criteresData.note_labels;
 
-    // Add a blank default option
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "— Non évalué —";
     select.appendChild(defaultOption);
 
-    // Add options 1 to 5
     for (let i = 1; i <= 5; i++) {
         const opt = document.createElement("option");
         opt.value = i;
-        // Score is normalized: note 1 = 0.0, note 5 = 1.0
         opt.dataset.score = (i - 1) / 4;
-        opt.textContent = `${i} — ${noteLabels[i]}`;
+        // Use String(i) to correctly match the string keys in note_labels
+        opt.textContent = noteLabels[String(i)];
         select.appendChild(opt);
     }
 
     return select;
+}
+
+// ===== CONDITIONS =====
+
+function applyConditions() {
+    // Hide or show categories and criteria based on their "condition" field.
+    // A condition means: only show this element if another criterion has value "satisfait".
+
+    const data = window.criteresData;
+
+    data.familles.forEach(famille => {
+        famille.categories.forEach(categorie => {
+
+            // --- Category-level condition ---
+            if (categorie.condition) {
+                const conditionMet = isCritereSatisfait(categorie.condition.critere_id);
+                const block = document.querySelector(
+                    `.category-block[data-categorie-id="${categorie.id}"]`
+                );
+                if (block) {
+                    // Show or hide the entire category block
+                    block.style.display = conditionMet ? "block" : "none";
+                }
+            }
+
+            // --- Criterion-level condition ---
+            categorie.criteres.forEach(critere => {
+                if (critere.condition) {
+                    const conditionMet = isCritereSatisfait(critere.condition.critere_id);
+                    const row = document.querySelector(
+                        `.critere-row[data-critere-id="${critere.id}"]`
+                    );
+                    if (row) {
+                        row.style.display = conditionMet ? "flex" : "none";
+                    }
+                }
+            });
+
+        });
+    });
+}
+
+
+function isCritereSatisfait(critereId, valeursAcceptees = null) {
+    // Returns true if the given criterion is considered "satisfied".
+    // - If valeurs_acceptees is provided: value must be in that list
+    // - For etat fields: must be explicitly set to "satisfait"
+    // - For other fields: any non-empty value counts
+    const input = document.getElementById(critereId);
+    if (!input) return false;
+
+    // If specific accepted values are defined, check against them
+    if (valeursAcceptees) {
+        return valeursAcceptees.includes(input.value);
+    }
+
+    const hasEtatOptions = input.querySelector('option[value="satisfait"]') !== null;
+    if (hasEtatOptions) {
+        return input.value === "satisfait";
+    } else {
+        return input.value !== "";
+    }
+}
+
+
+// ===== AUTO-COMPLETIONS =====
+
+function applyAutoCompletions() {
+    // Automatically fill certain criteria when their conditions are all met.
+    // Each auto_complete defines an operator (ET/OU) and a list of conditions.
+
+    const data = window.criteresData;
+
+    data.familles.forEach(famille => {
+        famille.categories.forEach(categorie => {
+            categorie.criteres.forEach(critere => {
+
+                if (!critere.auto_complete) return; // skip if no auto_complete defined
+
+                const { operateur, conditions } = critere.auto_complete;
+                const input = document.getElementById(critere.id);
+                if (!input) return;
+
+                // Evaluate each condition in the list
+                const results = conditions.map(cond =>
+                    isCritereSatisfait(cond.critere_id, cond.valeurs_acceptees || null)
+                );
+
+                // ET = all conditions must be true
+                // OU = at least one condition must be true
+                const allMet = operateur === "ET"
+                    ? results.every(Boolean)
+                    : results.some(Boolean);
+
+                if (allMet) {
+                    // Auto-fill and visually lock the field
+                    input.value = "satisfait";
+                    input.disabled = true;
+                    input.title = "Rempli automatiquement";
+                } else {
+                    // Reset and unlock if conditions are no longer met
+                    input.disabled = false;
+                    input.title = "";
+                    // Only reset if it was previously auto-filled
+                    // (don't overwrite a value the user set manually)
+                    if (input.dataset.autoFilled === "true") {
+                        input.value = "";
+                    }
+                }
+
+                // Track whether this field is currently auto-filled
+                input.dataset.autoFilled = allMet ? "true" : "false";
+            });
+        });
+    });
+}
+
+
+// ===== EVENT LISTENERS =====
+
+function attachChangeListeners() {
+    // Listen for any change on any input in the form.
+    // On each change, re-evaluate conditions and auto-completions.
+
+    const container = document.getElementById("form-container");
+
+    container.addEventListener("change", () => {
+        applyConditions();
+        applyAutoCompletions();
+    });
 }

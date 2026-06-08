@@ -3113,17 +3113,17 @@
               "description": "Bureau possible + bonne connectivité",
               "importance": "essentiel",
               "auto_complete": {
-                "operateur": "ET",
-                "conditions": [
-                  {
-                    "critere_id": "tele_bureau",
-                    "valeur": "satisfait"
-                  },
-                  {
-                    "critere_id": "res_debit",
-                    "valeur": "satisfait"
-                  }
-                ]
+                  "operateur": "ET",
+                  "conditions": [
+                      {
+                          "critere_id": "tele_bureau",
+                          "valeur": "satisfait"
+                      },
+                      {
+                          "critere_id": "res_debit",
+                          "valeurs_acceptees": ["fibre_500", "fibre_100"]
+                      }
+                  ]
               }
             }
           ]

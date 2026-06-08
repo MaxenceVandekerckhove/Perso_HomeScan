@@ -197,3 +197,12 @@ main {
 #submit-btn:hover {
     background: #3d5166;
 }
+
+/* ===== AUTO-COMPLETED FIELDS ===== */
+
+select:disabled {
+    background: #eaf4ea;
+    color: #1e8449;
+    border-color: #a9dfbf;
+    cursor: not-allowed;
+}
