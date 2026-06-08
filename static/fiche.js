@@ -22,7 +22,12 @@ function renderFiche(data) {
 
     container.appendChild(renderPropertyHeader(data));
 
-    if (data.alerts.length > 0) {
+    // Show alerts section if any category has items
+    if (
+        data.alerts.redhibitoires.length > 0 ||
+        data.alerts.faibles.length > 0 ||
+        data.alerts.forts.length > 0
+    ) {
         container.appendChild(renderAlerts(data.alerts));
     }
 
@@ -88,22 +93,72 @@ function renderPropertyHeader(data) {
 
 
 function renderAlerts(alerts) {
-    // Red warning block listing all unsatisfied redhibitoire criteria
-    const block = document.createElement("div");
-    block.classList.add("alerts-block");
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("alerts-wrapper");
 
-    const title = document.createElement("h3");
-    title.textContent = "⛔ Points rédhibitoires non satisfaits";
-    block.appendChild(title);
+    // --- Redhibitoires — all shown ---
+    if (alerts.redhibitoires.length > 0) {
+        wrapper.appendChild(renderAlertBlock(
+            "⛔ Points rédhibitoires non satisfaits",
+            alerts.redhibitoires,
+            "alert-block-red",
+            null  // no limit
+        ));
+    }
+
+    // --- Weak points — max 3 ---
+    if (alerts.faibles.length > 0) {
+        wrapper.appendChild(renderAlertBlock(
+            "⚠️ Points faibles",
+            alerts.faibles,
+            "alert-block-orange",
+            3
+        ));
+    }
+
+    // --- Strong points — max 3 ---
+    if (alerts.forts.length > 0) {
+        wrapper.appendChild(renderAlertBlock(
+            "✅ Points forts",
+            alerts.forts,
+            "alert-block-green",
+            3
+        ));
+    }
+
+    return wrapper;
+}
+
+
+function renderAlertBlock(title, items, cssClass, limit) {
+    const block = document.createElement("div");
+    block.classList.add("alert-block", cssClass);
+
+    const h3 = document.createElement("h3");
+    h3.textContent = title;
+    block.appendChild(h3);
 
     const list = document.createElement("ul");
-    alerts.forEach(alert => {
+
+    // Apply limit if defined
+    const displayed = limit ? items.slice(0, limit) : items;
+
+    displayed.forEach(item => {
         const li = document.createElement("li");
-        li.innerHTML = `<strong>${alert.label}</strong> 
-            <span class="alert-famille">${alert.familleLabel}</span>
-            <span class="alert-value">${alert.displayValue}</span>`;
+        li.innerHTML = `
+            <strong>${item.label}</strong>
+            <span class="alert-value">${item.displayValue}</span>
+        `;
         list.appendChild(li);
     });
+
+    // Show how many are hidden if limit is applied
+    if (limit && items.length > limit) {
+        const more = document.createElement("li");
+        more.classList.add("alert-more");
+        more.textContent = `+ ${items.length - limit} autres…`;
+        list.appendChild(more);
+    }
 
     block.appendChild(list);
     return block;

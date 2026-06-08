@@ -585,7 +585,11 @@ function collectFormData() {
         photoSrc: document.getElementById("photo-preview").src || null,
         score: calculateScore(),
         familles: [],
-        alerts: []  // list of unsatisfied redhibitoire criteria
+        alerts: {
+            redhibitoires: [],  // all unsatisfied redhibitoire criteria
+            faibles: [],        // score < 0.5, non-bonus criteria
+            forts: []           // score = 1.0, non-bonus criteria
+        }
     };
 
     let evaluatedCount = 0;
@@ -662,16 +666,48 @@ function collectFormData() {
                     evaluatedCount++;
                 }
 
-                // Flag unsatisfied redhibitoire criteria as alerts
+                // --- Alerts ---
+
+                const isBelowHalf = counts && obtained < pointsMax * 0.5;
+                const isPerfect = counts && obtained === pointsMax;
+                const isBonus = critere.importance === "bonus";
+
+                // Unsatisfied redhibitoire — all of them
                 if (
                     critere.importance === "redhibitoire" &&
                     value !== "" &&
                     counts &&
                     obtained === 0
                 ) {
-                    result.alerts.push({
+                    result.alerts.redhibitoires.push({
                         label: critere.label,
                         familleLabel: famille.label,
+                        displayValue
+                    });
+                }
+
+                // Weak points — score below 50%, excluding bonus, excluding redhibitoires at 0
+                if (
+                    !isBonus &&
+                    value !== "" &&
+                    counts &&
+                    isBelowHalf &&
+                    obtained > 0
+                ) {
+                    result.alerts.faibles.push({
+                        label: critere.label,
+                        familleLabel: famille.label,
+                        importance: critere.importance,
+                        displayValue
+                    });
+                }
+
+                // Strong points — perfect score, excluding bonus
+                if (!isBonus && value !== "" && isPerfect) {
+                    result.alerts.forts.push({
+                        label: critere.label,
+                        familleLabel: famille.label,
+                        importance: critere.importance,
                         displayValue
                     });
                 }
