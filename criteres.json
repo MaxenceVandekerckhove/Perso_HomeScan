@@ -1,0 +1,3172 @@
+{
+  "version": "1.2",
+  "description": "Critères d'évaluation d'un logement — seul fichier à modifier pour faire évoluer les critères",
+  "importance_niveaux": {
+    "redhibitoire": {
+      "label": "Rédhibitoire",
+      "emoji": "🔴",
+      "points": 20
+    },
+    "essentiel": {
+      "label": "Essentiel",
+      "emoji": "🟠",
+      "points": 12
+    },
+    "important": {
+      "label": "Important",
+      "emoji": "🟡",
+      "points": 7
+    },
+    "bonus": {
+      "label": "Bonus",
+      "emoji": "🟢",
+      "points": 3
+    }
+  },
+  "etat_valeurs": {
+    "satisfait": {
+      "label": "Satisfait",
+      "emoji": "✅",
+      "multiplicateur_etat": 1.0
+    },
+    "partiel": {
+      "label": "Partiel",
+      "emoji": "⚠️",
+      "multiplicateur_etat": 0.5
+    },
+    "non_satisfait": {
+      "label": "Non satisfait",
+      "emoji": "❌",
+      "multiplicateur_etat": 0.0
+    },
+    "non_applicable": {
+      "label": "Non applicable",
+      "emoji": "➖",
+      "multiplicateur_etat": null
+    }
+  },
+  "note_labels": {
+    "1": "Très mauvais",
+    "2": "Mauvais",
+    "3": "Correct",
+    "4": "Bon",
+    "5": "Excellent"
+  },
+  "familles": [
+    {
+      "id": "localisation_contexte",
+      "label": "Localisation & Contexte",
+      "emoji": "🗺️",
+      "categories": [
+        {
+          "id": "emplacement",
+          "label": "Emplacement",
+          "emoji": "📍",
+          "criteres": [
+            {
+              "id": "emp_quartier_reputation",
+              "label": "Réputation du quartier",
+              "description": "Quartier calme, bien entretenu, sentiment de sécurité",
+              "type_reponse": "note",
+              "importance": "important"
+            },
+            {
+              "id": "emp_nuisances_sonores",
+              "label": "Nuisances sonores",
+              "description": "Route à fort trafic, voie ferrée, couloir aérien à proximité",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "aucune",
+                  "label": "Aucune nuisance",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "faibles",
+                  "label": "Faibles",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "moderees",
+                  "label": "Modérées",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "fortes",
+                  "label": "Fortes",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "emp_pollution_air",
+              "label": "Qualité de l'air",
+              "description": "Industrie, axe routier majeur ou source de pollution proche",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "bonne",
+                  "label": "Bonne",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "correcte",
+                  "label": "Correcte",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "mauvaise",
+                  "label": "Mauvaise",
+                  "score": 0.0
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "emp_pollution_lumineuse",
+              "label": "Pollution lumineuse",
+              "description": "Éclairage intrusif la nuit (enseigne, lampadaires, entrepôt)",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "faible",
+                  "label": "Faible",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "moderee",
+                  "label": "Modérée",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "forte",
+                  "label": "Forte",
+                  "score": 0.0
+                }
+              ],
+              "importance": "bonus"
+            },
+            {
+              "id": "emp_commerces",
+              "label": "Distance des commerces",
+              "description": "Supermarché, boulangerie, pharmacie accessibles facilement",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_5",
+                  "label": "Moins de 5 min",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5_15",
+                  "label": "5 à 15 min",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "15_30",
+                  "label": "15 à 30 min",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "plus_30",
+                  "label": "Plus de 30 min",
+                  "score": 0.0
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "emp_restaurants",
+              "label": "Distance des restaurants",
+              "description": "Offre de restauration et animation locale agréable",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_5",
+                  "label": "Moins de 5 min",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5_15",
+                  "label": "5 à 15 min",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "plus_15",
+                  "label": "Plus de 15 min",
+                  "score": 0.2
+                }
+              ],
+              "importance": "bonus"
+            },
+            {
+              "id": "emp_espaces_verts",
+              "label": "Distance des parcs et espaces verts",
+              "description": "Parc, forêt, nature accessible à pied ou à vélo",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_5",
+                  "label": "Moins de 5 min",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5_15",
+                  "label": "5 à 15 min",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "plus_15",
+                  "label": "Plus de 15 min",
+                  "score": 0.2
+                }
+              ],
+              "importance": "bonus"
+            }
+          ]
+        },
+        {
+          "id": "accessibilite",
+          "label": "Accessibilité",
+          "emoji": "🚗",
+          "criteres": [
+            {
+              "id": "acc_trajet_travail",
+              "label": "Temps de trajet domicile — travail",
+              "description": "Trajet acceptable selon les habitudes et modes de transport",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_15",
+                  "label": "Moins de 15 min",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "15_30",
+                  "label": "15 à 30 min",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "30_45",
+                  "label": "30 à 45 min",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_45",
+                  "label": "Plus de 45 min",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "acc_transports_commun",
+              "label": "Accès aux transports en commun",
+              "description": "Bus, métro, tram accessibles à pied",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_5",
+                  "label": "Moins de 5 min à pied",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5_15",
+                  "label": "5 à 15 min à pied",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "plus_15",
+                  "label": "Plus de 15 min",
+                  "score": 0.1
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "acc_gare",
+              "label": "Proximité d'une gare",
+              "description": "Gare ferroviaire accessible facilement",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_5",
+                  "label": "Moins de 5 min",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5_15",
+                  "label": "5 à 15 min",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "15_30",
+                  "label": "15 à 30 min",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_30",
+                  "label": "Plus de 30 min",
+                  "score": 0.1
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "acc_autoroute",
+              "label": "Accès autoroutier",
+              "description": "Entrée d'autoroute à distance raisonnable",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_10",
+                  "label": "Moins de 10 min",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "10_20",
+                  "label": "10 à 20 min",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "plus_20",
+                  "label": "Plus de 20 min",
+                  "score": 0.2
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "acc_velo",
+              "label": "Accessibilité vélo",
+              "description": "Pistes cyclables, voies douces, topographie adaptée",
+              "importance": "bonus"
+            },
+            {
+              "id": "acc_pietons",
+              "label": "Accessibilité piétons",
+              "description": "Trottoirs, traversées sécurisées, quartier agréable à pied",
+              "importance": "bonus"
+            }
+          ]
+        },
+        {
+          "id": "perspectives",
+          "label": "Perspectives futures",
+          "emoji": "🔭",
+          "criteres": [
+            {
+              "id": "persp_projets_urbains",
+              "label": "Projets urbains à venir",
+              "description": "Impact des constructions ou aménagements prévus dans le secteur",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "aucun",
+                  "label": "Aucun connu",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "favorable",
+                  "label": "Favorable (parc, équipements…)",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "neutre",
+                  "label": "Neutre",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "defavorable",
+                  "label": "Défavorable (route, entrepôt…)",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "persp_developpement_eco",
+              "label": "Dynamisme économique local",
+              "description": "Zone en développement, offre d'emploi locale, bassin de vie actif",
+              "type_reponse": "note",
+              "importance": "important"
+            },
+            {
+              "id": "persp_valeur_immo",
+              "label": "Potentiel d'évolution de la valeur",
+              "description": "Secteur dont les prix ont tendance à progresser",
+              "type_reponse": "note",
+              "importance": "important"
+            },
+            {
+              "id": "persp_risque_degradation",
+              "label": "Faible risque de dégradation du quartier",
+              "description": "Pas de signes de désinvestissement, vacance commerciale ou insécurité croissante",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "risques",
+          "label": "Risques naturels & environnementaux",
+          "emoji": "⚠️",
+          "criteres": [
+            {
+              "id": "risq_inondation",
+              "label": "Zone inondable",
+              "description": "Classement PPRI du bien",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "hors_zone",
+                  "label": "Hors zone inondable",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "zone_faible",
+                  "label": "Zone à risque faible",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "zone_moyenne",
+                  "label": "Zone à risque moyen",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "zone_haute",
+                  "label": "Zone à risque élevé",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "risq_glissement",
+              "label": "Risque de glissement de terrain",
+              "description": "Stabilité du sol, mouvements de terrain référencés",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "aucun",
+                  "label": "Aucun risque",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "faible",
+                  "label": "Risque faible",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "modere",
+                  "label": "Risque modéré",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "eleve",
+                  "label": "Risque élevé",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "structure_enveloppe",
+      "label": "Structure & Enveloppe",
+      "emoji": "🏗️",
+      "categories": [
+        {
+          "id": "terrain_base",
+          "label": "Terrain",
+          "emoji": "🌱",
+          "criteres": [
+            {
+              "id": "terrain_surface",
+              "label": "Surface du terrain",
+              "description": "Surface totale de la parcelle",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_200",
+                  "label": "Moins de 200 m²",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "200_500",
+                  "label": "200 à 500 m²",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "500_1000",
+                  "label": "500 à 1 000 m²",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "1000_2000",
+                  "label": "1 000 à 2 000 m²",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "plus_2000",
+                  "label": "Plus de 2 000 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "terrain_forme",
+              "label": "Forme du terrain",
+              "description": "Régularité et exploitabilité de la forme de la parcelle",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "reguliere",
+                  "label": "Régulière",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "irreguliere",
+                  "label": "Irrégulière",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "contrainte",
+                  "label": "Très contrainte",
+                  "score": 0.2
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "terrain_topographie",
+              "label": "Topographie",
+              "description": "Relief et déclivité du terrain",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "plat",
+                  "label": "Plat",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "legere_pente",
+                  "label": "Légère pente",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "forte_pente",
+                  "label": "Forte pente",
+                  "score": 0.2
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "terrain_orientation",
+              "label": "Orientation du terrain",
+              "description": "Exposition générale de la parcelle et du bâti",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "sud",
+                  "label": "Sud",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "sud_ouest",
+                  "label": "Sud-Ouest",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "sud_est",
+                  "label": "Sud-Est",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "est_ouest",
+                  "label": "Est ou Ouest",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "nord",
+                  "label": "Nord",
+                  "score": 0.2
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "terrain_jardin_presence",
+              "label": "Jardin présent",
+              "description": "Présence d'un espace extérieur végétalisé",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "terrain_potager",
+              "label": "Espace potager possible",
+              "description": "Zone ensoleillée exploitable pour un potager",
+              "importance": "bonus"
+            },
+            {
+              "id": "terrain_piscine_presence",
+              "label": "Piscine présente",
+              "description": "Présence d'une piscine sur le terrain",
+              "importance": "bonus"
+            },
+            {
+              "id": "terrain_extension_possible",
+              "label": "Extension du bâti possible",
+              "description": "PLU autorisant une extension, surface disponible",
+              "importance": "bonus"
+            },
+            {
+              "id": "terrain_annexe_possible",
+              "label": "Construction annexe possible",
+              "description": "Possibilité de construire un garage, atelier, ou dépendance",
+              "importance": "bonus"
+            },
+            {
+              "id": "terrain_cloture_presence",
+              "label": "Clôture présente",
+              "description": "Terrain délimité et clos",
+              "importance": "bonus"
+            }
+          ]
+        },
+        {
+          "id": "fondations",
+          "label": "Fondations",
+          "emoji": "⛏️",
+          "criteres": [
+            {
+              "id": "fond_type",
+              "label": "Type de fondations",
+              "description": "Matériau et technique de fondation du bâtiment",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "beton_arme",
+                  "label": "Béton armé",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "pierre",
+                  "label": "Pierre / moellon",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "brique",
+                  "label": "Brique",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "inconnu",
+                  "label": "Inconnu",
+                  "score": 0.3
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "fond_etat",
+              "label": "État général des fondations",
+              "description": "Désordres visibles, tassement différentiel",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "bon",
+                  "label": "Bon",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "correct",
+                  "label": "Correct",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "degrade",
+                  "label": "Dégradé",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "inconnu",
+                  "label": "Inconnu",
+                  "score": 0.3
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "fond_fissures",
+              "label": "Fissures structurelles",
+              "description": "Présence et gravité des fissures sur les murs porteurs",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "aucune",
+                  "label": "Aucune",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "fines",
+                  "label": "Fissures fines (< 2 mm)",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "larges",
+                  "label": "Fissures larges (> 2 mm)",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "traversantes",
+                  "label": "Fissures traversantes",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "fond_travaux",
+              "label": "Pas de travaux majeurs à prévoir",
+              "description": "Fondations ne nécessitant pas de reprise en sous-œuvre",
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "murs",
+          "label": "Murs & Façades",
+          "emoji": "🧱",
+          "criteres": [
+            {
+              "id": "murs_type",
+              "label": "Type de murs",
+              "description": "Matériau principal de construction des murs",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "beton",
+                  "label": "Béton",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "pierre",
+                  "label": "Pierre",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "brique",
+                  "label": "Brique",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "parpaing",
+                  "label": "Parpaing",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "mixte",
+                  "label": "Mixte",
+                  "score": 0.7
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "murs_epaisseur",
+              "label": "Épaisseur des murs",
+              "description": "Épaisseur des murs extérieurs (inertie thermique)",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_20",
+                  "label": "Moins de 20 cm",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "20_35",
+                  "label": "20 à 35 cm",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "35_50",
+                  "label": "35 à 50 cm",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "plus_50",
+                  "label": "Plus de 50 cm",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "murs_etat",
+              "label": "État général des murs",
+              "description": "Fissures, enduit, façade — état visuel général",
+              "importance": "essentiel"
+            },
+            {
+              "id": "murs_humidite",
+              "label": "Traces d'humidité",
+              "description": "Remontées capillaires, auréoles, moisissures",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "aucune",
+                  "label": "Aucune",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "legeres",
+                  "label": "Légères",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "importantes",
+                  "label": "Importantes",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "generalisees",
+                  "label": "Généralisées",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "murs_infiltration",
+              "label": "Traces d'infiltration",
+              "description": "Infiltrations par les joints, fenêtres ou façade",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "aucune",
+                  "label": "Aucune",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "legeres",
+                  "label": "Légères",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "importantes",
+                  "label": "Importantes",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "generalisees",
+                  "label": "Généralisées",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "murs_travaux",
+              "label": "Pas de travaux importants sur les murs",
+              "description": "Ravalement, rejointoiement ou traitement non urgents",
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "planchers",
+          "label": "Planchers",
+          "emoji": "📐",
+          "criteres": [
+            {
+              "id": "planch_nature",
+              "label": "Nature des planchers",
+              "description": "Type de structure des planchers",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "beton",
+                  "label": "Béton",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "bois",
+                  "label": "Bois",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "hourdis",
+                  "label": "Hourdis",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "mixte",
+                  "label": "Mixte",
+                  "score": 0.7
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "planch_solidite",
+              "label": "Solidité des planchers",
+              "description": "Flexion, grincements, déformations",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "planch_isolation_phonique",
+              "label": "Isolation phonique",
+              "description": "Bruits de pas et transmissions sonores entre étages",
+              "importance": "important"
+            },
+            {
+              "id": "planch_travaux",
+              "label": "Pas de travaux importants sur les planchers",
+              "description": "Pas de renforcement ou remplacement nécessaire",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "charpente",
+          "label": "Charpente",
+          "emoji": "🪵",
+          "criteres": [
+            {
+              "id": "charp_type",
+              "label": "Type de charpente",
+              "description": "Type de structure de la charpente",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "traditionnelle",
+                  "label": "Traditionnelle",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "industrielle",
+                  "label": "Industrielle",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "mixte",
+                  "label": "Mixte",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "beton",
+                  "label": "Béton / Dalle",
+                  "score": 0.7
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "charp_etat_bois",
+              "label": "État du bois",
+              "description": "Santé du bois, pourriture, section des pièces",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "bon",
+                  "label": "Bon",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "correct",
+                  "label": "Correct",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "degrade",
+                  "label": "Dégradé",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "tres_degrade",
+                  "label": "Très dégradé",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "charp_insectes",
+              "label": "Absence d'insectes xylophages",
+              "description": "Traces de capricornes, vrillettes ou termites",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "charp_champignons",
+              "label": "Absence de champignons",
+              "description": "Mérule, armillaire ou autre champignon lignivore",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "charp_travaux",
+              "label": "Pas de travaux de charpente à prévoir",
+              "description": "Pas de remplacement ou consolidation urgente",
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "toiture",
+          "label": "Toiture",
+          "emoji": "🏠",
+          "criteres": [
+            {
+              "id": "toit_type_couverture",
+              "label": "Type de couverture",
+              "description": "Matériau de la couverture de toiture",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "tuiles",
+                  "label": "Tuiles",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "ardoises",
+                  "label": "Ardoises",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "bac_acier",
+                  "label": "Bac acier",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "zinc",
+                  "label": "Zinc",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "autre",
+                  "label": "Autre",
+                  "score": 0.5
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "toit_age",
+              "label": "Âge de la toiture",
+              "description": "Ancienneté de la couverture actuelle",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_10",
+                  "label": "Moins de 10 ans",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "10_20",
+                  "label": "10 à 20 ans",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "20_30",
+                  "label": "20 à 30 ans",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_30",
+                  "label": "Plus de 30 ans",
+                  "score": 0.1
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "toit_couverture",
+              "label": "État de la couverture",
+              "description": "Tuiles, ardoises en bon état, pas de casse ni déplacement",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "bon",
+                  "label": "Bon",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "correct",
+                  "label": "Correct",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "degrade",
+                  "label": "Dégradé",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "a_refaire",
+                  "label": "À refaire",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "toit_isolation",
+              "label": "Isolation sous toiture",
+              "description": "Présence et efficacité de l'isolation en combles",
+              "importance": "essentiel"
+            },
+            {
+              "id": "toit_etancheite",
+              "label": "Étanchéité assurée",
+              "description": "Pas de trace de fuite, noues, faîtages et rives sains",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "toit_travaux",
+              "label": "Pas de travaux de toiture à prévoir",
+              "description": "Pas de réfection ou réparation urgente",
+              "importance": "redhibitoire"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "equipements_performance",
+      "label": "Équipements & Performance",
+      "emoji": "⚡",
+      "categories": [
+        {
+          "id": "dpe",
+          "label": "Performance énergétique",
+          "emoji": "🌡️",
+          "criteres": [
+            {
+              "id": "dpe_classe",
+              "label": "Classe DPE",
+              "description": "Étiquette énergétique du logement",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "A",
+                  "label": "A — Très performant",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "B",
+                  "label": "B — Performant",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "C",
+                  "label": "C — Bon",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "D",
+                  "label": "D — Moyen",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "E",
+                  "label": "E — Faible",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "F",
+                  "label": "F — Très faible",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "G",
+                  "label": "G — Passoire thermique",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "dpe_consommation",
+              "label": "Consommation énergétique annuelle",
+              "description": "Consommation en kWh/m²/an",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_50",
+                  "label": "Moins de 50 kWh/m²/an",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "50_150",
+                  "label": "50 à 150 kWh/m²/an",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "150_250",
+                  "label": "150 à 250 kWh/m²/an",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "250_330",
+                  "label": "250 à 330 kWh/m²/an",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "plus_330",
+                  "label": "Plus de 330 kWh/m²/an",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "dpe_cout_annuel",
+              "label": "Coût énergétique annuel estimé",
+              "description": "Facture énergétique prévisionnelle",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_500",
+                  "label": "Moins de 500 €/an",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "500_1000",
+                  "label": "500 à 1 000 €/an",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "1000_2000",
+                  "label": "1 000 à 2 000 €/an",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_2000",
+                  "label": "Plus de 2 000 €/an",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "isolation",
+          "label": "Isolation",
+          "emoji": "🧊",
+          "criteres": [
+            {
+              "id": "isol_combles",
+              "label": "Isolation des combles",
+              "description": "Combles correctement isolés",
+              "importance": "important"
+            },
+            {
+              "id": "isol_murs",
+              "label": "Isolation des murs",
+              "description": "ITE ou ITI présente, ou murs épais à forte inertie",
+              "importance": "essentiel"
+            },
+            {
+              "id": "isol_sol",
+              "label": "Isolation du sol",
+              "description": "Dalle isolée ou vide sanitaire traité",
+              "importance": "important"
+            },
+            {
+              "id": "isol_fenetres",
+              "label": "Isolation des fenêtres",
+              "description": "Type de vitrage des menuiseries",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "triple",
+                  "label": "Triple vitrage",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "double",
+                  "label": "Double vitrage",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "simple",
+                  "label": "Simple vitrage",
+                  "score": 0.1
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "isol_travaux",
+              "label": "Pas de travaux d'isolation majeurs à prévoir",
+              "description": "Le niveau d'isolation actuel est suffisant ou acceptable",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "confort_thermique",
+          "label": "Confort thermique",
+          "emoji": "☀️",
+          "criteres": [
+            {
+              "id": "therm_hiver",
+              "label": "Confort en hiver",
+              "description": "Logement chaud sans surchauffe, pas de parois froides",
+              "importance": "essentiel",
+              "auto_complete": {
+                "operateur": "ET",
+                "conditions": [
+                  {
+                    "critere_id": "dpe_classe",
+                    "valeur": "satisfait"
+                  },
+                  {
+                    "critere_id": "isol_murs",
+                    "valeur": "satisfait"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "therm_ete",
+              "label": "Confort en été",
+              "description": "Logement supportable en canicule, sans climatisation obligatoire",
+              "importance": "essentiel"
+            },
+            {
+              "id": "therm_inertie",
+              "label": "Bonne inertie thermique",
+              "description": "Murs épais ou matériaux lourds qui régulent naturellement la température",
+              "importance": "important"
+            }
+          ]
+        },
+        {
+          "id": "energie_renouvelable",
+          "label": "Énergie renouvelable",
+          "emoji": "♻️",
+          "criteres": [
+            {
+              "id": "enr_photovoltaique",
+              "label": "Panneaux photovoltaïques",
+              "description": "Installation solaire présente et fonctionnelle",
+              "importance": "bonus"
+            },
+            {
+              "id": "enr_chauffe_eau_solaire",
+              "label": "Chauffe-eau solaire",
+              "description": "Production d'eau chaude solaire installée",
+              "importance": "bonus"
+            },
+            {
+              "id": "enr_pac",
+              "label": "Pompe à chaleur",
+              "description": "PAC air/air, air/eau ou géothermique installée",
+              "importance": "bonus"
+            }
+          ]
+        },
+        {
+          "id": "chauffage",
+          "label": "Chauffage",
+          "emoji": "🔥",
+          "criteres": [
+            {
+              "id": "chauf_type",
+              "label": "Type de chauffage",
+              "description": "Système de chauffage principal du logement",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "pac",
+                  "label": "Pompe à chaleur",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "gaz_condensation",
+                  "label": "Gaz condensation",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "bois_granules",
+                  "label": "Bois / Granulés",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "electrique",
+                  "label": "Électrique",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "fioul",
+                  "label": "Fioul",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "mixte",
+                  "label": "Mixte",
+                  "score": 0.7
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "chauf_age",
+              "label": "Âge de l'installation",
+              "description": "Ancienneté du système de chauffage",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_5",
+                  "label": "Moins de 5 ans",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5_10",
+                  "label": "5 à 10 ans",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "10_15",
+                  "label": "10 à 15 ans",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_15",
+                  "label": "Plus de 15 ans",
+                  "score": 0.1
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "chauf_rendement",
+              "label": "Rendement du système",
+              "description": "Efficacité énergétique du chauffage installé",
+              "importance": "essentiel"
+            },
+            {
+              "id": "chauf_cout",
+              "label": "Coût d'utilisation annuel",
+              "description": "Facture chauffage estimée pour le logement",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_500",
+                  "label": "Moins de 500 €/an",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "500_1000",
+                  "label": "500 à 1 000 €/an",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "1000_2000",
+                  "label": "1 000 à 2 000 €/an",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_2000",
+                  "label": "Plus de 2 000 €/an",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "chauf_travaux",
+              "label": "Pas de remplacement du système à prévoir",
+              "description": "Installation ne nécessitant pas de remplacement imminent",
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "climatisation",
+          "label": "Climatisation",
+          "emoji": "❄️",
+          "criteres": [
+            {
+              "id": "clim_presence",
+              "label": "Climatisation présente",
+              "description": "Système de climatisation ou réversible installé",
+              "importance": "bonus"
+            },
+            {
+              "id": "clim_efficacite",
+              "label": "Efficacité de la climatisation",
+              "description": "Système performant, bien dimensionné pour la surface",
+              "importance": "essentiel",
+              "condition": {
+                "critere_id": "clim_presence",
+                "valeur": "satisfait"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ventilation",
+          "label": "Ventilation",
+          "emoji": "💨",
+          "criteres": [
+            {
+              "id": "vent_vmc_simple",
+              "label": "VMC simple flux présente",
+              "description": "Ventilation mécanique contrôlée simple flux installée et fonctionnelle",
+              "importance": "essentiel"
+            },
+            {
+              "id": "vent_vmc_double",
+              "label": "VMC double flux",
+              "description": "VMC double flux avec récupération de chaleur",
+              "importance": "bonus"
+            },
+            {
+              "id": "vent_qualite_air",
+              "label": "Bonne qualité de l'air intérieur",
+              "description": "Pas d'odeurs persistantes, moisissures ou condensation excessive",
+              "importance": "essentiel"
+            },
+            {
+              "id": "vent_travaux",
+              "label": "Pas de travaux de ventilation à prévoir",
+              "description": "Système en place et fonctionnel",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "electricite",
+          "label": "Électricité",
+          "emoji": "🔌",
+          "criteres": [
+            {
+              "id": "elec_conformite",
+              "label": "Installation électrique conforme",
+              "description": "Norme NF C 15-100 respectée, pas de remarque au diagnostic",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "elec_tableau",
+              "label": "Tableau électrique",
+              "description": "Type et état du tableau de répartition",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "recent_disco",
+                  "label": "Récent avec disjoncteurs différentiels",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "ancien_disco",
+                  "label": "Ancien avec disjoncteurs",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "fusibles",
+                  "label": "Vieux fusibles",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "vetusteuse",
+                  "label": "Vétuste",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "elec_prises",
+              "label": "Nombre de prises",
+              "description": "Quantité et emplacement des prises dans chaque pièce",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "suffisant",
+                  "label": "Suffisant",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "insuffisant",
+                  "label": "Insuffisant",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "tres_insuf",
+                  "label": "Très insuffisant",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "elec_terre",
+              "label": "Présence de la mise à la terre",
+              "description": "Prise de terre correctement installée",
+              "importance": "essentiel"
+            },
+            {
+              "id": "elec_travaux",
+              "label": "Pas de mise aux normes électrique à prévoir",
+              "description": "Installation ne nécessitant pas de refaire le câblage",
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "canalisations",
+          "label": "Canalisations & Plomberie",
+          "emoji": "🔧",
+          "criteres": [
+            {
+              "id": "canal_etat",
+              "label": "État des canalisations",
+              "description": "Matériau et état des tuyaux (plomb, amiante, rouille…)",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "canal_pression",
+              "label": "Pression de l'eau",
+              "description": "Pression dans toutes les pièces d'eau",
+              "importance": "essentiel"
+            },
+            {
+              "id": "canal_evacuation",
+              "label": "Évacuations en bon état",
+              "description": "Pas d'odeurs, écoulements rapides, aucun bouchon récurrent",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "canal_travaux",
+              "label": "Pas de travaux de plomberie majeurs à prévoir",
+              "description": "Réseau sain ne nécessitant pas de remplacement imminent",
+              "importance": "redhibitoire"
+            }
+          ]
+        },
+        {
+          "id": "eau_chaude",
+          "label": "Eau chaude sanitaire",
+          "emoji": "🚿",
+          "criteres": [
+            {
+              "id": "ecs_type",
+              "label": "Type de production d'eau chaude",
+              "description": "Système de production d'eau chaude sanitaire",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "thermodynamique",
+                  "label": "Ballon thermodynamique",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "solaire",
+                  "label": "Chauffe-eau solaire",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "chaudiere",
+                  "label": "Chaudière (gaz/fioul)",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "electrique",
+                  "label": "Ballon électrique",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "instantane",
+                  "label": "Instantané électrique",
+                  "score": 0.4
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "ecs_capacite",
+              "label": "Capacité du ballon",
+              "description": "Volume du ballon d'eau chaude",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_100",
+                  "label": "Moins de 100 L",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "100_200",
+                  "label": "100 à 200 L",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "200_300",
+                  "label": "200 à 300 L",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "plus_300",
+                  "label": "Plus de 300 L",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "reseau",
+          "label": "Réseau & Connectivité",
+          "emoji": "📡",
+          "criteres": [
+            {
+              "id": "res_fibre",
+              "label": "Fibre optique disponible",
+              "description": "Fibre raccordée ou raccordable dans la rue",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "res_debit",
+              "label": "Débit internet",
+              "description": "Débit mesuré ou estimé disponible au logement",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "fibre_500",
+                  "label": "Fibre > 500 Mb/s",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "fibre_100",
+                  "label": "Fibre < 500 Mb/s",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "adsl",
+                  "label": "ADSL / VDSL",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "faible",
+                  "label": "Faible (< 10 Mb/s)",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "res_mobile",
+              "label": "Couverture mobile",
+              "description": "Qualité du réseau mobile à l'intérieur du logement",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "5g",
+                  "label": "5G",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "4g_bonne",
+                  "label": "4G bonne",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "4g_faible",
+                  "label": "4G faible",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "mauvaise",
+                  "label": "Mauvaise",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "interieur_confort",
+      "label": "Intérieur & Confort",
+      "emoji": "🛋️",
+      "categories": [
+        {
+          "id": "agencement",
+          "label": "Agencement",
+          "emoji": "📏",
+          "criteres": [
+            {
+              "id": "agenc_surface_habitable",
+              "label": "Surface habitable",
+              "description": "Surface loi Carrez du logement",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_50",
+                  "label": "Moins de 50 m²",
+                  "score": 0.0
+                },
+                {
+                  "valeur": "50_80",
+                  "label": "50 à 80 m²",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "80_120",
+                  "label": "80 à 120 m²",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "120_200",
+                  "label": "120 à 200 m²",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "plus_200",
+                  "label": "Plus de 200 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "agenc_surface_utile",
+              "label": "Surface utile exploitable",
+              "description": "Surface au sol réellement utilisable (hors dégagements inutiles)",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_40",
+                  "label": "Moins de 40 m²",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "40_70",
+                  "label": "40 à 70 m²",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "70_100",
+                  "label": "70 à 100 m²",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "plus_100",
+                  "label": "Plus de 100 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "agenc_nb_pieces",
+              "label": "Nombre de pièces",
+              "description": "Nombre de pièces principales (hors cuisine et SDB)",
+              "type_reponse": "nombre",
+              "options": [
+                {
+                  "valeur": "1",
+                  "label": "1 pièce (studio)",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "2",
+                  "label": "2 pièces",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "3",
+                  "label": "3 pièces",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "4",
+                  "label": "4 pièces",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "5",
+                  "label": "5 pièces",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "6+",
+                  "label": "6 pièces et plus",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "agenc_nb_chambres",
+              "label": "Nombre de chambres",
+              "description": "Nombre de chambres dans le logement",
+              "type_reponse": "nombre",
+              "options": [
+                {
+                  "valeur": "0",
+                  "label": "0 (studio)",
+                  "score": 0.0
+                },
+                {
+                  "valeur": "1",
+                  "label": "1 chambre",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "2",
+                  "label": "2 chambres",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "3",
+                  "label": "3 chambres",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "4",
+                  "label": "4 chambres",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "5+",
+                  "label": "5 et plus",
+                  "score": 1.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "agenc_nb_sdb",
+              "label": "Nombre de salles de bain",
+              "description": "Nombre de salles d'eau / salles de bain",
+              "type_reponse": "nombre",
+              "options": [
+                {
+                  "valeur": "1",
+                  "label": "1 salle de bain",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "2",
+                  "label": "2 salles de bain",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "3+",
+                  "label": "3 et plus",
+                  "score": 1.0
+                }
+              ],
+              "importance": "bonus"
+            },
+            {
+              "id": "agenc_nb_wc",
+              "label": "Nombre de WC",
+              "description": "Nombre de toilettes dans le logement",
+              "type_reponse": "nombre",
+              "options": [
+                {
+                  "valeur": "1",
+                  "label": "1 WC",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "2",
+                  "label": "2 WC",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "3+",
+                  "label": "3 et plus",
+                  "score": 1.0
+                }
+              ],
+              "importance": "bonus"
+            },
+            {
+              "id": "agenc_cave",
+              "label": "Cave présente",
+              "description": "Cave saine et accessible pour le stockage",
+              "importance": "bonus"
+            },
+            {
+              "id": "agenc_sous_sol",
+              "label": "Sous-sol aménageable",
+              "description": "Sous-sol avec hauteur sous plafond permettant l'aménagement",
+              "importance": "bonus"
+            },
+            {
+              "id": "agenc_combles",
+              "label": "Combles aménageables",
+              "description": "Combles avec hauteur suffisante et charpente compatible",
+              "importance": "bonus"
+            },
+            {
+              "id": "agenc_nb_etages",
+              "label": "Nombre d'étages",
+              "description": "Organisation verticale du logement",
+              "type_reponse": "nombre",
+              "options": [
+                {
+                  "valeur": "0",
+                  "label": "Plain-pied",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "1",
+                  "label": "1 étage",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "2",
+                  "label": "2 étages",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "3+",
+                  "label": "3 étages et plus",
+                  "score": 0.5
+                }
+              ],
+              "importance": "bonus"
+            },
+            {
+              "id": "agenc_distribution",
+              "label": "Distribution des pièces cohérente",
+              "description": "Pas de pièce traversante, circulation fluide, pas de surface perdue",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "luminosite",
+          "label": "Luminosité",
+          "emoji": "☀️",
+          "criteres": [
+            {
+              "id": "lum_exposition",
+              "label": "Exposition des pièces de vie",
+              "description": "Orientation des séjour et cuisine",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "sud",
+                  "label": "Sud",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "sud_ouest",
+                  "label": "Sud-Ouest",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "sud_est",
+                  "label": "Sud-Est",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "ouest",
+                  "label": "Ouest",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "est",
+                  "label": "Est",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "nord",
+                  "label": "Nord",
+                  "score": 0.2
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "lum_ouvertures",
+              "label": "Grandes ouvertures",
+              "description": "Fenêtres, baies vitrées ou vélux en nombre et taille suffisants",
+              "importance": "essentiel"
+            },
+            {
+              "id": "lum_naturelle",
+              "label": "Luminosité naturelle agréable",
+              "description": "Ressenti global de clarté dans les pièces principales",
+              "type_reponse": "note",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "acoustique",
+          "label": "Acoustique",
+          "emoji": "🔇",
+          "criteres": [
+            {
+              "id": "acou_voisinage",
+              "label": "Isolation vis-à-vis des voisins",
+              "description": "Bruits de voisinage perceptibles depuis l'intérieur",
+              "importance": "essentiel"
+            },
+            {
+              "id": "acou_exterieur",
+              "label": "Isolation des bruits extérieurs",
+              "description": "Rue, jardin, circulation filtrés efficacement",
+              "importance": "essentiel"
+            },
+            {
+              "id": "acou_travaux",
+              "label": "Pas de travaux acoustiques à prévoir",
+              "description": "Isolation phonique jugée suffisante en l'état",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "qualite_vie",
+          "label": "Qualité de vie",
+          "emoji": "✨",
+          "criteres": [
+            {
+              "id": "qdv_sensation_espace",
+              "label": "Sensation d'espace",
+              "description": "Logement qui ne donne pas une impression d'étroitesse",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "qdv_hauteur_plafond",
+              "label": "Hauteur sous plafond",
+              "description": "Hauteur des pièces de vie",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_230",
+                  "label": "Moins de 2m30",
+                  "score": 0.0
+                },
+                {
+                  "valeur": "230_250",
+                  "label": "2m30 à 2m50",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "250_270",
+                  "label": "2m50 à 2m70",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "plus_270",
+                  "label": "Plus de 2m70",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "qdv_qualite_materiaux",
+              "label": "Qualité des matériaux",
+              "description": "Finitions et matériaux dans les pièces principales",
+              "type_reponse": "note",
+              "importance": "important"
+            },
+            {
+              "id": "qdv_ambiance",
+              "label": "Ambiance générale",
+              "description": "Ressenti global — logement chaleureux et accueillant",
+              "type_reponse": "note",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "cuisine",
+          "label": "Cuisine",
+          "emoji": "🍳",
+          "criteres": [
+            {
+              "id": "cui_surface",
+              "label": "Surface de la cuisine",
+              "description": "Superficie de la pièce cuisine",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_6",
+                  "label": "Moins de 6 m²",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "6_10",
+                  "label": "6 à 10 m²",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "10_15",
+                  "label": "10 à 15 m²",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "plus_15",
+                  "label": "Plus de 15 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "cui_fonctionnalites",
+              "label": "Configuration de la cuisine",
+              "description": "Type d'agencement de la cuisine",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "ouverte",
+                  "label": "Ouverte sur séjour",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "semi_ouverte",
+                  "label": "Semi-ouverte",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "fermee",
+                  "label": "Fermée",
+                  "score": 0.8
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "cui_equipements",
+              "label": "État des équipements",
+              "description": "Électroménager, hotte et équipements en bon état",
+              "importance": "important"
+            },
+            {
+              "id": "cui_rangements",
+              "label": "Rangements suffisants",
+              "description": "Placards, tiroirs et espaces de rangement en quantité",
+              "importance": "essentiel"
+            },
+            {
+              "id": "cui_plan_travail",
+              "label": "Plan de travail fonctionnel",
+              "description": "Surface de plan de travail suffisante et en bon état",
+              "importance": "important"
+            },
+            {
+              "id": "cui_eclairage",
+              "label": "Éclairage adapté",
+              "description": "Lumière naturelle et éclairage artificiel suffisants",
+              "importance": "important"
+            },
+            {
+              "id": "cui_ventilation",
+              "label": "Ventilation efficace",
+              "description": "Hotte aspirante ou extraction correcte des odeurs",
+              "importance": "important"
+            },
+            {
+              "id": "cui_travaux",
+              "label": "Pas de travaux de cuisine à prévoir",
+              "description": "Cuisine en état ou nécessitant seulement des finitions légères",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "salle_eau",
+          "label": "Salle(s) de bain",
+          "emoji": "🚿",
+          "criteres": [
+            {
+              "id": "sdb_taille",
+              "label": "Taille de la salle de bain",
+              "description": "Surface de la salle d'eau principale",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_4",
+                  "label": "Moins de 4 m²",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "4_7",
+                  "label": "4 à 7 m²",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "plus_7",
+                  "label": "Plus de 7 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "sdb_etat",
+              "label": "État général",
+              "description": "Revêtements, joints et équipements en bon état",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "sdb_ventilation",
+              "label": "Ventilation correcte",
+              "description": "VMC ou fenêtre pour éviter condensation et moisissures",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "sdb_equipements",
+              "label": "Qualité des équipements",
+              "description": "Douche, baignoire, vasque en bon état et fonctionnels",
+              "importance": "essentiel"
+            },
+            {
+              "id": "sdb_accessibilite",
+              "label": "Accessibilité PMR possible",
+              "description": "Salle d'eau adaptable pour une personne à mobilité réduite",
+              "importance": "bonus"
+            },
+            {
+              "id": "sdb_travaux",
+              "label": "Pas de travaux de salle de bain à prévoir",
+              "description": "Pas de rénovation urgente nécessaire",
+              "importance": "important"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "exterieur_pratique",
+      "label": "Extérieur & Pratique",
+      "emoji": "🌳",
+      "categories": [
+        {
+          "id": "jardin",
+          "label": "Jardin",
+          "emoji": "🌿",
+          "condition": {
+            "critere_id": "terrain_jardin_presence",
+            "valeur": "satisfait"
+          },
+          "criteres": [
+            {
+              "id": "jard_taille",
+              "label": "Surface du jardin",
+              "description": "Superficie de l'espace extérieur végétalisé",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_50",
+                  "label": "Moins de 50 m²",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "50_200",
+                  "label": "50 à 200 m²",
+                  "score": 0.6
+                },
+                {
+                  "valeur": "200_500",
+                  "label": "200 à 500 m²",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "plus_500",
+                  "label": "Plus de 500 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "jard_entretien",
+              "label": "Entretien raisonnable",
+              "description": "Entretien compatible avec le temps disponible",
+              "importance": "important"
+            },
+            {
+              "id": "jard_intimite",
+              "label": "Intimité du jardin",
+              "description": "Jardin non visible des voisins ou de la rue",
+              "importance": "essentiel"
+            },
+            {
+              "id": "jard_travaux",
+              "label": "Pas de travaux de jardin majeurs à prévoir",
+              "description": "Pas de terrassement, drainage ou assainissement urgent",
+              "importance": "important"
+            }
+          ]
+        },
+        {
+          "id": "terrasse",
+          "label": "Terrasse",
+          "emoji": "☀️",
+          "condition": {
+            "critere_id": "terrain_jardin_presence",
+            "valeur": "satisfait"
+          },
+          "criteres": [
+            {
+              "id": "terr_surface",
+              "label": "Surface de la terrasse",
+              "description": "Superficie de la terrasse",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_10",
+                  "label": "Moins de 10 m²",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "10_20",
+                  "label": "10 à 20 m²",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "20_40",
+                  "label": "20 à 40 m²",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "plus_40",
+                  "label": "Plus de 40 m²",
+                  "score": 1.0
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "terr_orientation",
+              "label": "Orientation de la terrasse",
+              "description": "Exposition pour un ensoleillement agréable",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "sud",
+                  "label": "Sud",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "sud_ouest",
+                  "label": "Sud-Ouest",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "ouest",
+                  "label": "Ouest",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "est",
+                  "label": "Est",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "nord",
+                  "label": "Nord",
+                  "score": 0.1
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "terr_travaux",
+              "label": "Pas de travaux de terrasse à prévoir",
+              "description": "Revêtement et structure en bon état",
+              "importance": "important"
+            }
+          ]
+        },
+        {
+          "id": "piscine",
+          "label": "Piscine",
+          "emoji": "🏊",
+          "condition": {
+            "critere_id": "terrain_piscine_presence",
+            "valeur": "satisfait"
+          },
+          "criteres": [
+            {
+              "id": "pisc_etat",
+              "label": "État de la piscine",
+              "description": "État de la structure, liner ou carrelage",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "bon",
+                  "label": "Bon état",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "correct",
+                  "label": "Correct",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "a_renover",
+                  "label": "À rénover",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "hs",
+                  "label": "Hors service",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "pisc_cout_entretien",
+              "label": "Coût d'entretien annuel",
+              "description": "Estimation du coût annuel (produits, filtration, hivernage)",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_500",
+                  "label": "Moins de 500 €/an",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "500_1000",
+                  "label": "500 à 1 000 €/an",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "1000_2000",
+                  "label": "1 000 à 2 000 €/an",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "plus_2000",
+                  "label": "Plus de 2 000 €/an",
+                  "score": 0.0
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "pisc_travaux",
+              "label": "Pas de travaux de piscine à prévoir",
+              "description": "Pas de rénovation du bassin ou local technique à prévoir",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "cloture",
+          "label": "Clôture",
+          "emoji": "🔒",
+          "condition": {
+            "critere_id": "terrain_cloture_presence",
+            "valeur": "satisfait"
+          },
+          "criteres": [
+            {
+              "id": "clot_etat",
+              "label": "État de la clôture",
+              "description": "Clôture en bon état, stable et continue",
+              "importance": "important"
+            },
+            {
+              "id": "clot_securite",
+              "label": "Niveau de sécurité",
+              "description": "Hauteur, solidité et contrôle des accès",
+              "importance": "important"
+            },
+            {
+              "id": "clot_travaux",
+              "label": "Pas de travaux de clôture à prévoir",
+              "description": "Pas de remplacement ou réparation urgente",
+              "importance": "important"
+            }
+          ]
+        },
+        {
+          "id": "stationnement",
+          "label": "Stationnement",
+          "emoji": "🚗",
+          "criteres": [
+            {
+              "id": "stat_possible",
+              "label": "Stationnement possible",
+              "description": "Place de stationnement disponible dans la propriété",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "stat_nb_places",
+              "label": "Nombre de places",
+              "description": "Nombre de places de stationnement disponibles",
+              "type_reponse": "nombre",
+              "options": [
+                {
+                  "valeur": "1",
+                  "label": "1 place",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "2",
+                  "label": "2 places",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "3+",
+                  "label": "3 et plus",
+                  "score": 1.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "stat_garage",
+              "label": "Garage présent",
+              "description": "Garage fermé pour protéger les véhicules",
+              "importance": "important"
+            },
+            {
+              "id": "stat_carport",
+              "label": "Carport présent",
+              "description": "Abri voiture couvert mais non fermé",
+              "importance": "bonus"
+            },
+            {
+              "id": "stat_recharge_elec",
+              "label": "Recharge véhicule électrique possible",
+              "description": "Prise ou borne de recharge installée ou installable",
+              "importance": "bonus"
+            },
+            {
+              "id": "stat_visiteurs",
+              "label": "Stationnement visiteurs facile",
+              "description": "Rue ou espace permettant aux visiteurs de se garer",
+              "importance": "important"
+            }
+          ]
+        },
+        {
+          "id": "securite",
+          "label": "Sécurité",
+          "emoji": "🔐",
+          "criteres": [
+            {
+              "id": "secu_porte",
+              "label": "Porte d'entrée",
+              "description": "Niveau de sécurité de la porte d'entrée principale",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "blindee",
+                  "label": "Blindée multipoints",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "renforcee",
+                  "label": "Renforcée",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "standard",
+                  "label": "Standard",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "vetusteuse",
+                  "label": "Vétuste",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "secu_alarme",
+              "label": "Alarme présente ou installable",
+              "description": "Système d'alarme intrusion installé ou facilement installable",
+              "importance": "bonus"
+            },
+            {
+              "id": "secu_video",
+              "label": "Vidéosurveillance",
+              "description": "Caméras extérieures installées ou prévues",
+              "importance": "bonus"
+            },
+            {
+              "id": "secu_detecteur_fumee",
+              "label": "Détecteurs de fumée",
+              "description": "DAAF présents et fonctionnels (obligatoire)",
+              "importance": "essentiel"
+            },
+            {
+              "id": "secu_eclairage_ext",
+              "label": "Éclairage extérieur automatique",
+              "description": "Éclairage avec détecteur de mouvement à l'entrée",
+              "importance": "bonus"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "budget_juridique",
+      "label": "Budget & Juridique",
+      "emoji": "💶",
+      "categories": [
+        {
+          "id": "cout",
+          "label": "Coûts d'acquisition",
+          "emoji": "💰",
+          "criteres": [
+            {
+              "id": "cout_prix_achat",
+              "label": "Prix d'achat",
+              "description": "Prix de vente du bien",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_100k",
+                  "label": "Moins de 100 000 €",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "100_200k",
+                  "label": "100 000 à 200 000 €",
+                  "score": 0.9
+                },
+                {
+                  "valeur": "200_350k",
+                  "label": "200 000 à 350 000 €",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "350_500k",
+                  "label": "350 000 à 500 000 €",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_500k",
+                  "label": "Plus de 500 000 €",
+                  "score": 0.1
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "cout_notaire",
+              "label": "Frais de notaire acceptables",
+              "description": "Frais de notaire intégrés dans le budget global",
+              "importance": "essentiel"
+            },
+            {
+              "id": "cout_agence",
+              "label": "Frais d'agence acceptables",
+              "description": "Honoraires d'agence ou négociation possible",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "charges",
+          "label": "Charges courantes",
+          "emoji": "📊",
+          "criteres": [
+            {
+              "id": "charg_taxe_fonciere",
+              "label": "Taxe foncière annuelle",
+              "description": "Montant de la taxe foncière",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_500",
+                  "label": "Moins de 500 €/an",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "500_1000",
+                  "label": "500 à 1 000 €/an",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "1000_2000",
+                  "label": "1 000 à 2 000 €/an",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "plus_2000",
+                  "label": "Plus de 2 000 €/an",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "charg_assurance",
+              "label": "Assurance habitation abordable",
+              "description": "Prime d'assurance estimée dans le budget",
+              "importance": "essentiel"
+            },
+            {
+              "id": "charg_chauffage",
+              "label": "Facture chauffage maîtrisée",
+              "description": "Coût annuel du chauffage dans la moyenne ou inférieur",
+              "importance": "essentiel"
+            },
+            {
+              "id": "charg_eau",
+              "label": "Facture eau raisonnable",
+              "description": "Consommation et tarif de l'eau dans la norme",
+              "importance": "essentiel"
+            },
+            {
+              "id": "charg_electricite",
+              "label": "Facture électricité maîtrisée",
+              "description": "Consommation électrique dans la norme pour la surface",
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "budget_travaux",
+          "label": "Budget travaux",
+          "emoji": "🔨",
+          "criteres": [
+            {
+              "id": "trav_immediats",
+              "label": "Travaux immédiats",
+              "description": "Travaux urgents à réaliser avant ou juste après emménagement",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "aucun",
+                  "label": "Aucun",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "moins_5k",
+                  "label": "Moins de 5 000 €",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "5_20k",
+                  "label": "5 000 à 20 000 €",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "20_50k",
+                  "label": "20 000 à 50 000 €",
+                  "score": 0.1
+                },
+                {
+                  "valeur": "plus_50k",
+                  "label": "Plus de 50 000 €",
+                  "score": 0.0
+                }
+              ],
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "trav_moyen_terme",
+              "label": "Travaux à moyen terme (2–5 ans)",
+              "description": "Travaux prévisibles dans les 2 à 5 ans",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "aucun",
+                  "label": "Aucun",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "moins_10k",
+                  "label": "Moins de 10 000 €",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "10_30k",
+                  "label": "10 000 à 30 000 €",
+                  "score": 0.4
+                },
+                {
+                  "valeur": "plus_30k",
+                  "label": "Plus de 30 000 €",
+                  "score": 0.1
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "trav_long_terme",
+              "label": "Travaux à long terme (> 5 ans)",
+              "description": "Travaux anticipés au-delà de 5 ans",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "aucun",
+                  "label": "Aucun",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "moins_10k",
+                  "label": "Moins de 10 000 €",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "10_30k",
+                  "label": "10 000 à 30 000 €",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "plus_30k",
+                  "label": "Plus de 30 000 €",
+                  "score": 0.2
+                }
+              ],
+              "importance": "important"
+            },
+            {
+              "id": "trav_budget_renov",
+              "label": "Budget rénovation global",
+              "description": "Enveloppe travaux totale tous termes confondus",
+              "type_reponse": "intervalle",
+              "options": [
+                {
+                  "valeur": "moins_10k",
+                  "label": "Moins de 10 000 €",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "10_30k",
+                  "label": "10 000 à 30 000 €",
+                  "score": 0.7
+                },
+                {
+                  "valeur": "30_80k",
+                  "label": "30 000 à 80 000 €",
+                  "score": 0.3
+                },
+                {
+                  "valeur": "plus_80k",
+                  "label": "Plus de 80 000 €",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            }
+          ]
+        },
+        {
+          "id": "valeur_patrimoniale",
+          "label": "Valeur patrimoniale",
+          "emoji": "📈",
+          "criteres": [
+            {
+              "id": "patri_revente",
+              "label": "Potentiel de revente",
+              "description": "Facilité à revendre le bien à bon prix",
+              "type_reponse": "note",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "patri_liquidite",
+              "label": "Liquidité du bien",
+              "description": "Vitesse de vente estimée sur le marché local",
+              "type_reponse": "note",
+              "importance": "essentiel"
+            },
+            {
+              "id": "patri_attractivite",
+              "label": "Attractivité du secteur",
+              "description": "Zone recherchée, demande soutenue",
+              "type_reponse": "note",
+              "importance": "essentiel"
+            },
+            {
+              "id": "patri_evolution_prix",
+              "label": "Évolution historique des prix",
+              "description": "Tendance des prix du secteur ces dernières années",
+              "type_reponse": "choix_unique",
+              "options": [
+                {
+                  "valeur": "forte_hausse",
+                  "label": "Forte hausse",
+                  "score": 1.0
+                },
+                {
+                  "valeur": "legere_hausse",
+                  "label": "Légère hausse",
+                  "score": 0.8
+                },
+                {
+                  "valeur": "stable",
+                  "label": "Stable",
+                  "score": 0.5
+                },
+                {
+                  "valeur": "legere_baisse",
+                  "label": "Légère baisse",
+                  "score": 0.2
+                },
+                {
+                  "valeur": "forte_baisse",
+                  "label": "Forte baisse",
+                  "score": 0.0
+                }
+              ],
+              "importance": "essentiel"
+            },
+            {
+              "id": "patri_rarete",
+              "label": "Rareté du bien",
+              "description": "Type de bien peu commun dans le secteur",
+              "importance": "bonus"
+            }
+          ]
+        },
+        {
+          "id": "juridique",
+          "label": "Aspects juridiques",
+          "emoji": "⚖️",
+          "criteres": [
+            {
+              "id": "jur_permis_conforme",
+              "label": "Permis de construire conforme",
+              "description": "Le bien a été construit conformément au permis déposé",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "jur_extensions_declarees",
+              "label": "Extensions déclarées et conformes",
+              "description": "Toute extension a été régulièrement déclarée",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "jur_diagnostics",
+              "label": "Diagnostics obligatoires fournis",
+              "description": "DPE, amiante, plomb, termites, électricité, gaz fournis",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "jur_litiges",
+              "label": "Absence de litiges en cours",
+              "description": "Pas de procédure judiciaire ou conflit voisinage actif",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "jur_bornage",
+              "label": "Bornage du terrain réalisé",
+              "description": "Limites du terrain définies par un géomètre expert",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "jur_servitude",
+              "label": "Servitudes acceptables",
+              "description": "Aucune servitude de passage ou contrainte gênante",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "jur_cadastre",
+              "label": "Conformité cadastrale",
+              "description": "Surface cadastrale cohérente avec la réalité du terrain",
+              "importance": "redhibitoire"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "usages",
+      "label": "Usages",
+      "emoji": "🎯",
+      "categories": [
+        {
+          "id": "teletravail",
+          "label": "Télétravail",
+          "emoji": "💻",
+          "criteres": [
+            {
+              "id": "tele_bureau",
+              "label": "Bureau dédié possible",
+              "description": "Pièce ou espace séparé pour un bureau de travail",
+              "importance": "redhibitoire"
+            },
+            {
+              "id": "tele_qualite_internet",
+              "label": "Qualité internet pour le télétravail",
+              "description": "Débit et stabilité compatibles avec visioconférence et outils métier",
+              "importance": "essentiel",
+              "condition": {
+                "critere_id": "res_fibre",
+                "valeur": "satisfait"
+              }
+            },
+            {
+              "id": "tele_conditions_globales",
+              "label": "Conditions globales de télétravail favorables",
+              "description": "Bureau possible + bonne connectivité",
+              "importance": "essentiel",
+              "auto_complete": {
+                "operateur": "ET",
+                "conditions": [
+                  {
+                    "critere_id": "tele_bureau",
+                    "valeur": "satisfait"
+                  },
+                  {
+                    "critere_id": "res_debit",
+                    "valeur": "satisfait"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "loisirs",
+          "label": "Loisirs & Espace personnel",
+          "emoji": "🎨",
+          "criteres": [
+            {
+              "id": "lois_jardin",
+              "label": "Jardin pour les loisirs extérieurs",
+              "description": "Espace extérieur exploitable pour les loisirs et la détente",
+              "importance": "essentiel",
+              "auto_complete": {
+                "operateur": "OU",
+                "conditions": [
+                  {
+                    "critere_id": "terrain_jardin_presence",
+                    "valeur": "satisfait"
+                  },
+                  {
+                    "critere_id": "jard_taille",
+                    "valeur": "satisfait"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "lois_atelier",
+              "label": "Espace atelier ou bricolage",
+              "description": "Garage, dépendance ou sous-sol pour un atelier",
+              "importance": "bonus"
+            },
+            {
+              "id": "lois_salle_sport",
+              "label": "Salle de sport possible",
+              "description": "Espace suffisant pour équipements de sport à domicile",
+              "importance": "bonus"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
