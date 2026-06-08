@@ -62,11 +62,10 @@ function buildForm(data) {
         container.appendChild(section);
     });
 
-    // Apply conditions and auto-completions once the form is built,
-    // then start listening for changes
     applyConditions();
     applyAutoCompletions();
     attachChangeListeners();
+    updateScoreDisplay(); // initialize the display
 }
 
 
@@ -374,13 +373,111 @@ function applyAutoCompletions() {
 // ===== EVENT LISTENERS =====
 
 function attachChangeListeners() {
-    // Listen for any change on any input in the form.
-    // On each change, re-evaluate conditions and auto-completions.
-
     const container = document.getElementById("form-container");
 
     container.addEventListener("change", () => {
         applyConditions();
         applyAutoCompletions();
+        updateScoreDisplay(); // recalculate on every change
     });
+}
+
+// ===== SCORING =====
+
+function calculateScore() {
+    // Calculate the global score across all evaluated criteria.
+    // Returns an object with totalObtained, totalMax, and a 0-100 score.
+
+    let totalObtained = 0;
+    let totalMax = 0;
+
+    const data = window.criteresData;
+
+    data.familles.forEach(famille => {
+        famille.categories.forEach(categorie => {
+
+            // Skip hidden categories (conditional ones not yet unlocked)
+            const categoryBlock = document.querySelector(
+                `.category-block[data-categorie-id="${categorie.id}"]`
+            );
+            if (categoryBlock && categoryBlock.style.display === "none") return;
+
+            categorie.criteres.forEach(critere => {
+
+                // Skip hidden criteria
+                const row = document.querySelector(
+                    `.critere-row[data-critere-id="${critere.id}"]`
+                );
+                if (row && row.style.display === "none") return;
+
+                const input = document.getElementById(critere.id);
+                if (!input || input.value === "") return; // skip unevaluated
+
+                const pointsMax = IMPORTANCE_POINTS[critere.importance];
+                const typeReponse = critere.type_reponse || "etat";
+
+                let obtained = 0;
+                let counts = true; // whether this criterion counts toward totalMax
+
+                if (typeReponse === "etat") {
+                    const multiplier = ETAT_MULTIPLIERS[input.value];
+
+                    // non_applicable: exclude from scoring entirely
+                    if (multiplier === null) {
+                        counts = false;
+                    } else {
+                        obtained = pointsMax * multiplier;
+                    }
+
+                } else if (typeReponse === "note") {
+                    // Score is stored in the selected option's dataset
+                    const selectedOption = input.options[input.selectedIndex];
+                    const score = parseFloat(selectedOption.dataset.score);
+                    obtained = pointsMax * score;
+
+                } else {
+                    // choix_unique, intervalle, nombre
+                    const selectedOption = input.options[input.selectedIndex];
+                    const score = parseFloat(selectedOption.dataset.score);
+                    obtained = pointsMax * score;
+                }
+
+                if (counts) {
+                    totalObtained += obtained;
+                    totalMax += pointsMax;
+                }
+            });
+        });
+    });
+
+    // Avoid division by zero if nothing is evaluated yet
+    const percentage = totalMax > 0
+        ? Math.round((totalObtained / totalMax) * 100)
+        : null;
+
+    return { totalObtained, totalMax, percentage };
+}
+
+
+function updateScoreDisplay() {
+    // Recalculate and update the score shown in the bottom bar.
+    const { percentage } = calculateScore();
+    const display = document.getElementById("score-display");
+
+    if (percentage === null) {
+        display.textContent = "—";
+        display.style.color = "#2c3e50";
+    } else {
+        display.textContent = `${percentage} / 100`;
+        // Color the score based on its value
+        display.style.color = scoreColor(percentage);
+    }
+}
+
+
+function scoreColor(percentage) {
+    // Returns a color hex code based on the score range.
+    if (percentage >= 75) return "#1e8449"; // green
+    if (percentage >= 50) return "#d35400"; // orange
+    return "#c0392b";                        // red
 }
