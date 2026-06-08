@@ -26,8 +26,8 @@ const ETAT_MULTIPLIERS = {
 // Wait for the page to be fully loaded before doing anything
 document.addEventListener("DOMContentLoaded", () => {
     loadCriteres();
+    initPhotoPreview();
 });
-
 
 // ===== DATA LOADING =====
 
@@ -480,4 +480,71 @@ function scoreColor(percentage) {
     if (percentage >= 75) return "#1e8449"; // green
     if (percentage >= 50) return "#d35400"; // orange
     return "#c0392b";                        // red
+}
+
+// ===== PHOTO PREVIEW =====
+
+function initPhotoPreview() {
+    // Handle photo input via three methods:
+    // 1. Classic file picker (click)
+    // 2. Drag and drop onto the drop zone
+    // 3. Paste from clipboard (Ctrl+V)
+
+    const input = document.getElementById("property-photo");
+    const dropzone = document.getElementById("photo-dropzone");
+    const preview = document.getElementById("photo-preview");
+    const hint = document.getElementById("dropzone-hint");
+
+    // --- 1. Classic file picker ---
+    input.addEventListener("change", () => {
+        if (input.files[0]) showPreview(input.files[0]);
+    });
+
+    // --- 2. Drag and drop ---
+
+    // Needed to allow dropping (browser blocks drop by default)
+    dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("drag-over");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+        dropzone.classList.remove("drag-over");
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("drag-over");
+
+        // Look for an image file in the dropped items
+        const file = [...e.dataTransfer.items]
+            .find(item => item.type.startsWith("image/"))
+            ?.getAsFile();
+
+        if (file) showPreview(file);
+    });
+
+    // --- 3. Paste from clipboard ---
+    document.addEventListener("paste", (e) => {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+
+        for (const item of items) {
+            if (item.type.startsWith("image/")) {
+                showPreview(item.getAsFile());
+                break;
+            }
+        }
+    });
+
+    // --- Preview helper ---
+    function showPreview(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+            hint.style.display = "none"; // hide the hint once a photo is set
+        };
+        reader.readAsDataURL(file);
+    }
 }

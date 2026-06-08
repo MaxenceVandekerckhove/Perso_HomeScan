@@ -16,9 +16,29 @@
     <main>
 
         <!-- Property name input — lets the user identify the property being evaluated -->
+        <!-- Property information — name, listing URL, and optional photo -->
         <section class="property-header">
-            <label for="property-name">Nom du bien</label>
-            <input type="text" id="property-name" placeholder="Ex : Maison Dupont, Villa les Pins…">
+
+            <div class="property-field">
+                <label for="property-name">Nom du bien</label>
+                <input type="text" id="property-name" placeholder="Ex : Maison Dupont, Villa les Pins…">
+            </div>
+
+            <div class="property-field">
+                <label for="property-url">Lien de l'annonce</label>
+                <input type="url" id="property-url" placeholder="https://…">
+            </div>
+            
+            <div class="property-field">
+                <label>Photo du bien</label>
+                <!-- Drop zone — accepts file selection, drag & drop, and paste -->
+                <div id="photo-dropzone">
+                    <span id="dropzone-hint">📎 Glisser une photo, coller (Ctrl+V) ou cliquer pour choisir</span>
+                    <input type="file" id="property-photo" accept="image/*">
+                    <img id="photo-preview" src="" alt="Aperçu du bien">
+                </div>
+            </div>
+
         </section>
 
         <!-- This div will be filled dynamically by app.js -->
