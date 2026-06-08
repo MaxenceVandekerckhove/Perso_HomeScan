@@ -2,10 +2,41 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logement Eval</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Logement Eval</h1>
-    <p>Le formulaire sera ici.</p>
+
+    <header>
+        <h1>🏠 Home Scan</h1>
+        <p class="subtitle">Évaluez et comparez vos biens immobiliers</p>
+    </header>
+
+    <main>
+
+        <!-- Property name input — lets the user identify the property being evaluated -->
+        <section class="property-header">
+            <label for="property-name">Nom du bien</label>
+            <input type="text" id="property-name" placeholder="Ex : Maison Dupont, Villa les Pins…">
+        </section>
+
+        <!-- This div will be filled dynamically by app.js -->
+        <!-- Each family of criteria will become a <section> inside here -->
+        <div id="form-container">
+            <p class="loading">Chargement des critères…</p>
+        </div>
+
+        <!-- Fixed bottom bar with the score and submit button -->
+        <div class="bottom-bar">
+            <div class="score-preview">
+                Score : <span id="score-display">—</span>
+            </div>
+            <button id="submit-btn">Voir la fiche synthèse →</button>
+        </div>
+
+    </main>
+
+    <script src="/static/app.js"></script>
 </body>
 </html>
