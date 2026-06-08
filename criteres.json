@@ -5,22 +5,22 @@
     "redhibitoire": {
       "label": "Rédhibitoire",
       "emoji": "🔴",
-      "points": 20
+      "points": 30
     },
     "essentiel": {
       "label": "Essentiel",
       "emoji": "🟠",
-      "points": 12
+      "points": 20
     },
     "important": {
       "label": "Important",
       "emoji": "🟡",
-      "points": 7
+      "points": 8
     },
     "bonus": {
       "label": "Bonus",
       "emoji": "🟢",
-      "points": 3
+      "points": 4
     }
   },
   "etat_valeurs": {

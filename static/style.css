@@ -81,6 +81,28 @@ main {
     color: #555;
 }
 
+/* ===== PRICE INPUT ===== */
+
+.price-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-input-wrapper input {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 200px;
+}
+
+.price-currency {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 600;
+}
+
 /* Photo preview — hidden until a file is selected */
 #photo-preview {
     display: none;

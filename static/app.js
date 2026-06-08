@@ -6,10 +6,10 @@
 
 // Points awarded based on importance level (matches criteres.json logic)
 const IMPORTANCE_POINTS = {
-    redhibitoire: 20,
-    essentiel: 12,
-    important: 7,
-    bonus: 3
+    redhibitoire: 30,
+    essentiel: 20,
+    important: 8,
+    bonus: 4
 };
 
 // Multiplier applied to points based on the satisfaction state
@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initPhotoPreview();
     initSubmitButton();
 });
+
 // ===== DATA LOADING =====
 
 async function loadCriteres() {
@@ -580,6 +581,7 @@ function collectFormData() {
     const result = {
         propertyName: document.getElementById("property-name").value || "Bien sans nom",
         propertyUrl: document.getElementById("property-url").value || null,
+        propertyPrice: document.getElementById("property-price").value || null,
         photoSrc: document.getElementById("photo-preview").src || null,
         score: calculateScore(),
         familles: [],

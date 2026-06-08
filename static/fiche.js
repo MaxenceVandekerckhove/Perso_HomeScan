@@ -32,7 +32,7 @@ function renderFiche(data) {
 
 
 function renderPropertyHeader(data) {
-    // Top card: photo, name, global score, and listing link
+    // Top card: photo, name, price, global score, and listing link
     const card = document.createElement("div");
     card.classList.add("fiche-property-card");
 
@@ -45,6 +45,7 @@ function renderPropertyHeader(data) {
         card.appendChild(img);
     }
 
+    // info must be declared before anything tries to append to it
     const info = document.createElement("div");
     info.classList.add("fiche-property-info");
 
@@ -52,6 +53,14 @@ function renderPropertyHeader(data) {
     const name = document.createElement("h2");
     name.textContent = data.propertyName;
     info.appendChild(name);
+
+    // Price — placed right after the name
+    if (data.propertyPrice) {
+        const price = document.createElement("p");
+        price.classList.add("property-price");
+        price.textContent = parseInt(data.propertyPrice).toLocaleString("fr-FR") + " €";
+        info.appendChild(price);
+    }
 
     // Listing URL
     if (data.propertyUrl) {

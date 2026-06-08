@@ -223,3 +223,9 @@
     font-size: 0.85rem;
     text-align: right;
 }
+
+.property-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
