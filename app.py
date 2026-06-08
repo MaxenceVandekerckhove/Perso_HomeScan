@@ -39,6 +39,13 @@ def api_criteres():
     """
     return jsonify(charger_criteres())
 
+@app.route("/fiche")
+def fiche():
+    """
+    Summary page — displays the evaluation results.
+    Data is passed via sessionStorage from the main form page.
+    """
+    return render_template("fiche.html")
 
 # --- DÉMARRAGE ---
 

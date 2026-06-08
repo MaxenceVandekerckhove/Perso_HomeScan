@@ -27,8 +27,8 @@ const ETAT_MULTIPLIERS = {
 document.addEventListener("DOMContentLoaded", () => {
     loadCriteres();
     initPhotoPreview();
+    initSubmitButton();
 });
-
 // ===== DATA LOADING =====
 
 async function loadCriteres() {
@@ -547,4 +547,158 @@ function initPhotoPreview() {
         };
         reader.readAsDataURL(file);
     }
+}
+
+// ===== FORM SUBMISSION =====
+
+function initSubmitButton() {
+    // On click, collect all form data and store it in sessionStorage,
+    // then navigate to the summary page.
+
+    document.getElementById("submit-btn").addEventListener("click", () => {
+        const data = collectFormData();
+
+        if (data.evaluatedCount === 0) {
+            alert("Veuillez évaluer au moins un critère avant de continuer.");
+            return;
+        }
+
+        // Store the snapshot in sessionStorage (cleared when tab is closed)
+        sessionStorage.setItem("logement-eval-result", JSON.stringify(data));
+
+        // Navigate to the summary page
+        window.location.href = "/fiche";
+    });
+}
+
+
+function collectFormData() {
+    // Collect all form values and compute scores per family.
+    // Returns a structured object ready to be displayed on the fiche page.
+
+    const criteresData = window.criteresData;
+    const result = {
+        propertyName: document.getElementById("property-name").value || "Bien sans nom",
+        propertyUrl: document.getElementById("property-url").value || null,
+        photoSrc: document.getElementById("photo-preview").src || null,
+        score: calculateScore(),
+        familles: [],
+        alerts: []  // list of unsatisfied redhibitoire criteria
+    };
+
+    let evaluatedCount = 0;
+
+    criteresData.familles.forEach(famille => {
+
+        const familleResult = {
+            id: famille.id,
+            label: famille.label,
+            emoji: famille.emoji,
+            score: null,
+            totalObtained: 0,
+            totalMax: 0,
+            categories: []
+        };
+
+        famille.categories.forEach(categorie => {
+
+            // Skip hidden categories
+            const block = document.querySelector(
+                `.category-block[data-categorie-id="${categorie.id}"]`
+            );
+            if (block && block.style.display === "none") return;
+
+            const categorieResult = {
+                id: categorie.id,
+                label: categorie.label,
+                emoji: categorie.emoji,
+                criteres: []
+            };
+
+            categorie.criteres.forEach(critere => {
+
+                // Skip hidden criteria
+                const row = document.querySelector(
+                    `.critere-row[data-critere-id="${critere.id}"]`
+                );
+                if (row && row.style.display === "none") return;
+
+                const input = document.getElementById(critere.id);
+                if (!input) return;
+
+                const value = input.value;
+                const typeReponse = critere.type_reponse || "etat";
+                const pointsMax = IMPORTANCE_POINTS[critere.importance];
+
+                let obtained = 0;
+                let counts = true;
+                let displayValue = "—";
+
+                if (value === "") {
+                    counts = false;
+                    displayValue = "Non évalué";
+                } else if (typeReponse === "etat") {
+                    const multiplier = ETAT_MULTIPLIERS[value];
+                    const etatsData = criteresData.etat_valeurs[value];
+                    displayValue = `${etatsData.emoji} ${etatsData.label}`;
+
+                    if (multiplier === null) {
+                        counts = false;
+                    } else {
+                        obtained = pointsMax * multiplier;
+                    }
+                } else {
+                    const selectedOption = input.options[input.selectedIndex];
+                    const score = parseFloat(selectedOption.dataset.score);
+                    obtained = pointsMax * score;
+                    displayValue = selectedOption.textContent;
+                }
+
+                if (counts && value !== "") {
+                    familleResult.totalObtained += obtained;
+                    familleResult.totalMax += pointsMax;
+                    evaluatedCount++;
+                }
+
+                // Flag unsatisfied redhibitoire criteria as alerts
+                if (
+                    critere.importance === "redhibitoire" &&
+                    value !== "" &&
+                    counts &&
+                    obtained === 0
+                ) {
+                    result.alerts.push({
+                        label: critere.label,
+                        familleLabel: famille.label,
+                        displayValue
+                    });
+                }
+
+                categorieResult.criteres.push({
+                    id: critere.id,
+                    label: critere.label,
+                    importance: critere.importance,
+                    displayValue,
+                    obtained: counts ? obtained : null,
+                    max: counts ? pointsMax : null
+                });
+            });
+
+            if (categorieResult.criteres.length > 0) {
+                familleResult.categories.push(categorieResult);
+            }
+        });
+
+        // Compute family-level percentage
+        if (familleResult.totalMax > 0) {
+            familleResult.score = Math.round(
+                (familleResult.totalObtained / familleResult.totalMax) * 100
+            );
+        }
+
+        result.familles.push(familleResult);
+    });
+
+    result.evaluatedCount = evaluatedCount;
+    return result;
 }
