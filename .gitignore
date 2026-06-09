@@ -1,0 +1,4 @@
+# Ignore saved evaluations (user data, not source code)
+evaluations/*
+# But keep the folder itself tracked
+!evaluations/.gitkeep

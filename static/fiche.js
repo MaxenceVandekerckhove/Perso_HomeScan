@@ -22,7 +22,6 @@ function renderFiche(data) {
 
     container.appendChild(renderPropertyHeader(data));
 
-    // Show alerts section if any category has items
     if (
         data.alerts.redhibitoires.length > 0 ||
         data.alerts.faibles.length > 0 ||
@@ -33,6 +32,9 @@ function renderFiche(data) {
 
     container.appendChild(renderFamilyScores(data.familles));
     container.appendChild(renderDetails(data.familles));
+
+    // Initialize save and edit buttons
+    initActions(data);
 }
 
 
@@ -269,4 +271,45 @@ function scoreColor(percentage) {
     if (percentage >= 75) return "#1e8449";
     if (percentage >= 50) return "#d35400";
     return "#c0392b";
+}
+
+// ===== SAVE & EDIT ACTIONS =====
+
+function initActions(data) {
+    // --- Save button ---
+    document.getElementById("btn-sauvegarder").addEventListener("click", async () => {
+        const btn = document.getElementById("btn-sauvegarder");
+        btn.disabled = true;
+        btn.textContent = "Sauvegarde…";
+
+        try {
+            const response = await fetch("/api/sauvegarder", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                btn.textContent = "✅ Sauvegardé";
+                // Store the slug so we can reload it later if needed
+                sessionStorage.setItem("logement-eval-slug", result.slug);
+            } else {
+                btn.textContent = "❌ Erreur";
+                btn.disabled = false;
+            }
+        } catch (err) {
+            console.error("Save failed:", err);
+            btn.textContent = "❌ Erreur";
+            btn.disabled = false;
+        }
+    });
+
+    // --- Edit button ---
+    document.getElementById("btn-modifier").addEventListener("click", () => {
+        // The evaluation data is already in sessionStorage from the form submission.
+        // We just navigate back — app.js will detect it and pre-fill the form.
+        window.location.href = "/";
+    });
 }

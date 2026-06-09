@@ -260,3 +260,30 @@
     font-weight: 600;
     color: #2c3e50;
 }
+
+/* ===== BOTTOM BAR (fiche) ===== */
+
+.btn-primary {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-primary:hover { background: #3d5166; }
+.btn-primary:disabled { background: #95a5a6; cursor: not-allowed; }
+
+.btn-secondary {
+    background: white;
+    color: #2c3e50;
+    border: 1px solid #2c3e50;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-secondary:hover { background: #f4f6f9; }
