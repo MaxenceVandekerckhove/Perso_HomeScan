@@ -587,11 +587,20 @@ function collectFormData() {
     // Returns a structured object ready to be displayed on the fiche page.
 
     const criteresData = window.criteresData;
+
+    // Only store photoSrc if a photo is actually displayed
+    const photoPreview = document.getElementById("photo-preview");
+    const photoSrcRaw = photoPreview.src || "";
+    // Only keep the src if it's a real image (base64 or saved file path)
+    const photoSrc = photoSrcRaw.startsWith("data:image") || photoSrcRaw.includes("/evaluations/")
+        ? photoSrcRaw
+        : null;
+
     const result = {
         propertyName: document.getElementById("property-name").value || "Bien sans nom",
         propertyUrl: document.getElementById("property-url").value || null,
         propertyPrice: document.getElementById("property-price").value || null,
-        photoSrc: document.getElementById("photo-preview").src || null,
+        photoSrc: photoSrc,
         score: calculateScore(),
         familles: [],
         formValues: {}, // flat map of all raw input values — used to pre-fill the form on edit

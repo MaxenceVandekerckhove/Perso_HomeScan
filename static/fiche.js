@@ -68,6 +68,9 @@ function renderFiche(data) {
 
 
 function renderPropertyHeader(data) {
+
+    console.log("photoSrc:", data.photoSrc);
+    
     // Top card: photo, name, price, global score, and listing link
     const card = document.createElement("div");
     card.classList.add("fiche-property-card");
@@ -78,6 +81,13 @@ function renderPropertyHeader(data) {
         img.src = data.photoSrc;
         img.classList.add("fiche-photo");
         img.alt = data.propertyName;
+        card.appendChild(img);
+    } else {
+        // Show placeholder if no photo was provided
+        const img = document.createElement("img");
+        img.src = "/static/house_placeholder.png";
+        img.classList.add("fiche-photo");
+        img.alt = "Photo non disponible";
         card.appendChild(img);
     }
 

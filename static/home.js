@@ -47,16 +47,17 @@ function buildCard(evaluation) {
     const photoWrapper = document.createElement("div");
     photoWrapper.classList.add("card-photo");
 
+    const img = document.createElement("img");
+    img.alt = evaluation.propertyName;
+
     if (evaluation.photoFilename) {
-        const img = document.createElement("img");
         img.src = `/evaluations/${evaluation.slug}/${evaluation.photoFilename}`;
-        img.alt = evaluation.propertyName;
-        photoWrapper.appendChild(img);
     } else {
-        // Placeholder if no photo
-        photoWrapper.classList.add("card-photo-placeholder");
-        photoWrapper.textContent = "🏠";
+        // Show placeholder if no photo was provided
+        img.src = "/static/house_placeholder.png";
     }
+
+    photoWrapper.appendChild(img);
 
     // --- Info ---
     const info = document.createElement("div");
