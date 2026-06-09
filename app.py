@@ -44,8 +44,13 @@ def slugify(text):
 # --- PAGE ROUTES ---
 
 @app.route("/")
+def home():
+    """Home page — lists all saved evaluations."""
+    return render_template("home.html")
+
+@app.route("/evaluer")
 def index():
-    """Main form page."""
+    """Evaluation form page."""
     return render_template("index.html")
 
 
@@ -75,32 +80,30 @@ def api_sauvegarder():
     if not data:
         return jsonify({"error": "No data received"}), 400
 
-    # Generate the folder slug from the property name
     slug = slugify(data.get("propertyName", "bien-sans-nom"))
     folder = os.path.join(EVALUATIONS_DIR, slug)
     os.makedirs(folder, exist_ok=True)
 
-    # Handle photo — save as a separate file, not in the JSON
     photo_src = data.get("photoSrc")
-    photo_filename = None
+    # Keep the existing filename if the photo was already saved
+    photo_filename = data.get("photoFilename")
 
     if photo_src and photo_src.startswith("data:image"):
-        # Extract the image format and base64 data
-        # Format: "data:image/jpeg;base64,<data>"
+        # New photo uploaded as base64 — save it to disk
         header, b64data = photo_src.split(",", 1)
         ext = header.split("/")[1].split(";")[0]  # e.g. "jpeg"
         photo_filename = f"photo.{ext}"
         photo_path = os.path.join(folder, photo_filename)
-
         with open(photo_path, "wb") as f:
             f.write(base64.b64decode(b64data))
 
-    # Remove the base64 photo from the JSON — store only the filename
+    # If photoSrc is a URL (already saved), the existing photoFilename is kept as-is
+    # No need to re-save the image file
+
     data["photoSrc"] = None
     data["photoFilename"] = photo_filename
     data["slug"] = slug
 
-    # Write the evaluation JSON
     json_path = os.path.join(folder, "evaluation.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -161,6 +164,24 @@ def serve_photo(slug, filename):
     from flask import send_from_directory
     return send_from_directory(os.path.join(EVALUATIONS_DIR, slug), filename)
 
+@app.route("/fiche/<slug>")
+def fiche_sauvegardee(slug):
+    """Display the summary page for a saved evaluation."""
+    return render_template("fiche.html")
+
+@app.route("/api/evaluations/<slug>", methods=["DELETE"])
+def api_supprimer(slug):
+    """
+    Delete a saved evaluation and its folder from disk.
+    """
+    import shutil
+    folder = os.path.join(EVALUATIONS_DIR, slug)
+
+    if not os.path.exists(folder):
+        return jsonify({"error": "Evaluation not found"}), 404
+
+    shutil.rmtree(folder)
+    return jsonify({"success": True})
 
 # --- START ---
 

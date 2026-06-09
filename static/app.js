@@ -38,6 +38,19 @@ async function loadCriteres() {
         const data = await response.json();
         window.criteresData = data;
         buildForm(data);
+
+        // Check if we're editing a saved evaluation from a slug in the URL
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get("slug");
+
+        if (slug) {
+            // Load from the server and pre-fill
+            const evalResponse = await fetch(`/api/evaluations/${slug}`);
+            const evalData = await evalResponse.json();
+            // Store in sessionStorage so prefillForm() can use it
+            sessionStorage.setItem("logement-eval-result", JSON.stringify(evalData));
+        }
+
         prefillForm();
 
     } catch (error) {
@@ -581,6 +594,7 @@ function collectFormData() {
         photoSrc: document.getElementById("photo-preview").src || null,
         score: calculateScore(),
         familles: [],
+        formValues: {}, // flat map of all raw input values — used to pre-fill the form on edit
         alerts: {
             redhibitoires: [],  // all unsatisfied redhibitoire criteria
             faibles: [],        // score < 0.5, non-bonus criteria
@@ -631,6 +645,9 @@ function collectFormData() {
                 const value = input.value;
                 const typeReponse = critere.type_reponse || "etat";
                 const pointsMax = IMPORTANCE_POINTS[critere.importance];
+
+                // Store every non-empty raw value in the flat map
+                if (value !== "") result.formValues[critere.id] = value;
 
                 let obtained = 0;
                 let counts = true;
@@ -713,7 +730,6 @@ function collectFormData() {
                     label: critere.label,
                     importance: critere.importance,
                     displayValue,
-                    savedValue: value, 
                     obtained: counts ? obtained : null,
                     max: counts ? pointsMax : null
                 });
@@ -761,39 +777,29 @@ function prefillForm() {
     }
 
     // --- Photo preview ---
-    // If a photo was saved, re-display it from the evaluation folder
+    const preview = document.getElementById("photo-preview");
+    const hint = document.getElementById("dropzone-hint");
+
     if (data.photoFilename && data.slug) {
-        const preview = document.getElementById("photo-preview");
-        const hint = document.getElementById("dropzone-hint");
+        // Photo already saved on disk — load from server
         preview.src = `/evaluations/${data.slug}/${data.photoFilename}`;
         preview.style.display = "block";
         hint.style.display = "none";
     } else if (data.photoSrc) {
-        // Fall back to base64 if the photo hasn't been saved yet
-        const preview = document.getElementById("photo-preview");
-        const hint = document.getElementById("dropzone-hint");
+        // Photo not yet saved — use base64 from sessionStorage
         preview.src = data.photoSrc;
         preview.style.display = "block";
         hint.style.display = "none";
     }
 
     // --- Criteria fields ---
-    // Loop through all families and set each input to its saved value
-    data.familles.forEach(famille => {
-        famille.categories.forEach(categorie => {
-            categorie.criteres.forEach(critere => {
-                if (!critere.displayValue || critere.displayValue === "Non évalué") return;
+    // Use the flat formValues map for reliable pre-filling
+    if (!data.formValues) return;
 
-                const input = document.getElementById(critere.id);
-                if (!input) return;
-
-                // Find the original saved value by matching the display value
-                // We stored the raw value in the critere object
-                if (critere.savedValue !== undefined) {
-                    input.value = critere.savedValue;
-                }
-            });
-        });
+    Object.entries(data.formValues).forEach(([critereId, value]) => {
+        const input = document.getElementById(critereId);
+        if (!input) return;
+        input.value = value;
     });
 
     // Re-apply conditions and score after pre-filling

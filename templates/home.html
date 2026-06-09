@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Scan</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/home.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div>
+                <h1>🏠 Home Scan</h1>
+                <p class="subtitle">Mes évaluations</p>
+            </div>
+            <a href="/evaluer" class="btn-primary">+ Nouvelle évaluation</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Property cards will be inserted here by home.js -->
+        <div id="evaluations-container">
+            <p class="loading">Chargement des évaluations…</p>
+        </div>
+    </main>
+
+    <script src="/static/home.js"></script>
+
+</body>
+</html>

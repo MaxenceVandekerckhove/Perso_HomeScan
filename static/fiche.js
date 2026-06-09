@@ -1,18 +1,47 @@
 // fiche.js
 // Reads the evaluation result from sessionStorage and renders the summary page.
 
-document.addEventListener("DOMContentLoaded", () => {
-    const raw = sessionStorage.getItem("logement-eval-result");
+document.addEventListener("DOMContentLoaded", async () => {
+    // Check if we're loading a saved evaluation from a URL slug
+    // e.g. /fiche/maison-dupont
+    const pathParts = window.location.pathname.split("/");
+    const slug = pathParts[2]; // e.g. "maison-dupont"
 
-    if (!raw) {
-        document.getElementById("fiche-container").innerHTML =
-            `<p class="loading">Aucune évaluation trouvée. 
-            <a href="/">Retourner au formulaire</a></p>`;
-        return;
+    if (slug) {
+        // Load from the server
+        try {
+            const response = await fetch(`/api/evaluations/${slug}`);
+            const data = await response.json();
+
+            if (data.error) {
+                document.getElementById("fiche-container").innerHTML =
+                    `<p class="loading">Évaluation introuvable. <a href="/">Retour à l'accueil</a></p>`;
+                return;
+            }
+
+            // Restore the photo URL for display
+            if (data.photoUrl) {
+                data.photoSrc = data.photoUrl;
+            }
+
+            renderFiche(data);
+
+        } catch (err) {
+            console.error("Failed to load evaluation:", err);
+        }
+
+    } else {
+        // Load from sessionStorage (coming from the form)
+        const raw = sessionStorage.getItem("logement-eval-result");
+
+        if (!raw) {
+            document.getElementById("fiche-container").innerHTML =
+                `<p class="loading">Aucune évaluation trouvée. <a href="/">Retour à l'accueil</a></p>`;
+            return;
+        }
+
+        renderFiche(JSON.parse(raw));
     }
-
-    const data = JSON.parse(raw);
-    renderFiche(data);
 });
 
 
@@ -293,7 +322,8 @@ function initActions(data) {
 
             if (result.success) {
                 btn.textContent = "✅ Sauvegardé";
-                // Store the slug so we can reload it later if needed
+                // Update the slug in data in case it was just created
+                data.slug = result.slug;
                 sessionStorage.setItem("logement-eval-slug", result.slug);
             } else {
                 btn.textContent = "❌ Erreur";
@@ -308,8 +338,12 @@ function initActions(data) {
 
     // --- Edit button ---
     document.getElementById("btn-modifier").addEventListener("click", () => {
-        // The evaluation data is already in sessionStorage from the form submission.
-        // We just navigate back — app.js will detect it and pre-fill the form.
-        window.location.href = "/";
+        // If the evaluation has a slug, redirect to the edit URL
+        // Otherwise go back to a blank form
+        if (data.slug) {
+            window.location.href = `/evaluer?slug=${data.slug}`;
+        } else {
+            window.location.href = "/evaluer";
+        }
     });
 }
