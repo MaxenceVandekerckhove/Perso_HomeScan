@@ -2,13 +2,10 @@
 // Reads the evaluation result from sessionStorage and renders the summary page.
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // Check if we're loading a saved evaluation from a URL slug
-    // e.g. /fiche/maison-dupont
     const pathParts = window.location.pathname.split("/");
-    const slug = pathParts[2]; // e.g. "maison-dupont"
+    const slug = pathParts[2];
 
     if (slug) {
-        // Load from the server
         try {
             const response = await fetch(`/api/evaluations/${slug}`);
             const data = await response.json();
@@ -19,7 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // Restore the photo URL for display
             if (data.photoUrl) {
                 data.photoSrc = data.photoUrl;
             }
@@ -31,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
     } else {
-        // Load from sessionStorage (coming from the form)
         const raw = sessionStorage.getItem("logement-eval-result");
 
         if (!raw) {
@@ -43,6 +38,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderFiche(JSON.parse(raw));
     }
 });
+
+function cleanEtatText(value) {
+    if (!value) return value;
+
+    return value
+        // enlève uniquement les emojis d'état
+        .replace(/\s?[✅⚠️❌➖]\s?/g, " ")
+        // nettoie les espaces multiples
+        .replace(/\s+/g, " ")
+        .trim();
+}
 
 
 function renderFiche(data) {
@@ -62,53 +68,44 @@ function renderFiche(data) {
     container.appendChild(renderFamilyScores(data.familles));
     container.appendChild(renderDetails(data.familles));
 
-    // Initialize save and edit buttons
     initActions(data);
 }
 
 
+/* =========================
+   HEADER
+========================= */
+
 function renderPropertyHeader(data) {
 
-    console.log("photoSrc:", data.photoSrc);
-    
-    // Top card: photo, name, price, global score, and listing link
     const card = document.createElement("div");
     card.classList.add("fiche-property-card");
 
-    // Photo
-    if (data.photoSrc && data.photoSrc !== window.location.href) {
-        const img = document.createElement("img");
-        img.src = data.photoSrc;
-        img.classList.add("fiche-photo");
-        img.alt = data.propertyName;
-        card.appendChild(img);
-    } else {
-        // Show placeholder if no photo was provided
-        const img = document.createElement("img");
-        img.src = "/static/house_placeholder.png";
-        img.classList.add("fiche-photo");
-        img.alt = "Photo non disponible";
-        card.appendChild(img);
-    }
+    const img = document.createElement("img");
+    img.classList.add("fiche-photo");
+    img.alt = data.propertyName;
 
-    // info must be declared before anything tries to append to it
+    img.src = (data.photoSrc && data.photoSrc !== window.location.href)
+        ? data.photoSrc
+        : "/static/house_placeholder.png";
+
+    card.appendChild(img);
+
     const info = document.createElement("div");
     info.classList.add("fiche-property-info");
 
-    // Property name
     const name = document.createElement("h2");
     name.textContent = data.propertyName;
     info.appendChild(name);
 
-    // Price — placed right after the name
     if (data.propertyPrice) {
         const price = document.createElement("p");
         price.classList.add("property-price");
-        price.textContent = parseInt(data.propertyPrice).toLocaleString("fr-FR") + " €";
+        price.textContent =
+            parseInt(data.propertyPrice).toLocaleString("fr-FR") + " €";
         info.appendChild(price);
     }
 
-    // Listing URL
     if (data.propertyUrl) {
         const link = document.createElement("a");
         link.href = data.propertyUrl;
@@ -118,37 +115,40 @@ function renderPropertyHeader(data) {
         info.appendChild(link);
     }
 
-    // Global score
+    const pct = data.score.percentage;
+
     const scoreBlock = document.createElement("div");
     scoreBlock.classList.add("global-score");
-    const pct = data.score.percentage;
     scoreBlock.innerHTML = `
-        <span class="score-number" style="color: ${scoreColor(pct)}">${pct}</span>
+        <span class="score-number" style="color:${scoreColor(pct)}">${pct}</span>
         <span class="score-label">/ 100</span>
     `;
-    info.appendChild(scoreBlock);
 
+    info.appendChild(scoreBlock);
     card.appendChild(info);
+
     return card;
 }
 
+
+/* =========================
+   ALERTS
+========================= */
 
 function renderAlerts(alerts) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("alerts-wrapper");
 
-    // --- Redhibitoires — all shown ---
-    if (alerts.redhibitoires.length > 0) {
+    if (alerts.redhibitoires.length) {
         wrapper.appendChild(renderAlertBlock(
             "⛔ Points rédhibitoires non satisfaits",
             alerts.redhibitoires,
             "alert-block-red",
-            null  // no limit
+            null
         ));
     }
 
-    // --- Weak points — max 3 ---
-    if (alerts.faibles.length > 0) {
+    if (alerts.faibles.length) {
         wrapper.appendChild(renderAlertBlock(
             "⚠️ Points faibles",
             alerts.faibles,
@@ -157,8 +157,7 @@ function renderAlerts(alerts) {
         ));
     }
 
-    // --- Strong points — max 3 ---
-    if (alerts.forts.length > 0) {
+    if (alerts.forts.length) {
         wrapper.appendChild(renderAlertBlock(
             "✅ Points forts",
             alerts.forts,
@@ -168,6 +167,19 @@ function renderAlerts(alerts) {
     }
 
     return wrapper;
+}
+
+
+function stripEtatEmoji(value) {
+    if (!value) return value;
+
+    // suppression UNIQUEMENT des emojis d'états connus
+    return value
+        .replaceAll("✅", "")
+        .replaceAll("⚠️", "")
+        .replaceAll("❌", "")
+        .replaceAll("➖", "")
+        .trim();
 }
 
 
@@ -181,19 +193,21 @@ function renderAlertBlock(title, items, cssClass, limit) {
 
     const list = document.createElement("ul");
 
-    // Apply limit if defined
     const displayed = limit ? items.slice(0, limit) : items;
 
     displayed.forEach(item => {
         const li = document.createElement("li");
+
         li.innerHTML = `
             <strong>${item.label}</strong>
-            <span class="alert-value">${item.displayValue}</span>
+            <span class="alert-value">
+                ${stripEtatEmoji(item.displayValue)}
+            </span>
         `;
+
         list.appendChild(li);
     });
 
-    // Show how many are hidden if limit is applied
     if (limit && items.length > limit) {
         const more = document.createElement("li");
         more.classList.add("alert-more");
@@ -206,8 +220,11 @@ function renderAlertBlock(title, items, cssClass, limit) {
 }
 
 
+/* =========================
+   FAMILY SCORES
+========================= */
+
 function renderFamilyScores(familles) {
-    // Summary bar chart — one row per family with a visual score bar
     const block = document.createElement("div");
     block.classList.add("family-scores-block");
 
@@ -216,14 +233,14 @@ function renderFamilyScores(familles) {
     block.appendChild(title);
 
     familles.forEach(famille => {
-        if (famille.score === null) return; // skip unevaluated families
+        if (famille.score === null) return;
 
         const row = document.createElement("div");
         row.classList.add("family-score-row");
 
         const label = document.createElement("span");
         label.classList.add("family-score-label");
-        label.textContent = `${famille.emoji} ${famille.label}`;
+        label.textContent = famille.label;
 
         const barWrapper = document.createElement("div");
         barWrapper.classList.add("score-bar-wrapper");
@@ -241,6 +258,7 @@ function renderFamilyScores(familles) {
         row.appendChild(label);
         row.appendChild(barWrapper);
         row.appendChild(scoreText);
+
         block.appendChild(row);
     });
 
@@ -248,8 +266,11 @@ function renderFamilyScores(familles) {
 }
 
 
+/* =========================
+   DETAILS (inchangé sauf sécurité)
+========================= */
+
 function renderDetails(familles) {
-    // Full detail section — all families, categories, and criteria
     const block = document.createElement("div");
     block.classList.add("details-block");
 
@@ -279,8 +300,9 @@ function renderDetails(familles) {
 
                 const badge = document.createElement("span");
                 badge.classList.add("importance-badge", `badge-${critere.importance}`);
-                badge.textContent = critere.importance.charAt(0).toUpperCase()
-                    + critere.importance.slice(1);
+                badge.textContent =
+                    critere.importance.charAt(0).toUpperCase() +
+                    critere.importance.slice(1);
 
                 const label = document.createElement("span");
                 label.classList.add("detail-label");
@@ -288,11 +310,12 @@ function renderDetails(familles) {
 
                 const value = document.createElement("span");
                 value.classList.add("detail-value");
-                value.textContent = critere.displayValue;
-
+                value.textContent = cleanEtatText(critere.displayValue);
+                
                 row.appendChild(badge);
                 row.appendChild(label);
                 row.appendChild(value);
+
                 catEl.appendChild(row);
             });
 
@@ -306,30 +329,33 @@ function renderDetails(familles) {
 }
 
 
-function scoreColor(percentage) {
-    if (percentage >= 75) return "#1e8449";
-    if (percentage >= 50) return "#d35400";
+/* =========================
+   SCORE COLOR
+========================= */
+
+function scoreColor(p) {
+    if (p >= 75) return "#1e8449";
+    if (p >= 50) return "#d35400";
     return "#c0392b";
 }
 
-// ===== SAVE & EDIT ACTIONS =====
+
+/* =========================
+   ACTIONS
+========================= */
 
 function initActions(data) {
     const btn = document.getElementById("btn-sauvegarder");
 
-    // If viewing a saved evaluation (has a slug in the URL), disable the save button
-    // until the user has made modifications (i.e. came back from the edit form)
     const pathParts = window.location.pathname.split("/");
     const slugInUrl = pathParts[2];
     const comingFromForm = !!sessionStorage.getItem("logement-eval-result");
 
     if (slugInUrl && !comingFromForm) {
-        // Viewing a saved fiche with no pending changes — disable save
         btn.disabled = true;
         btn.title = "Aucune modification à sauvegarder";
     }
 
-    // --- Save button ---
     btn.addEventListener("click", async () => {
         btn.disabled = true;
         btn.textContent = "Sauvegarde…";
@@ -346,8 +372,9 @@ function initActions(data) {
             if (result.success) {
                 btn.textContent = "✅ Sauvegardé";
                 data.slug = result.slug;
+
                 sessionStorage.setItem("logement-eval-slug", result.slug);
-                // Redirect to home after a short delay so the user sees the confirmation
+
                 setTimeout(() => {
                     sessionStorage.removeItem("logement-eval-result");
                     window.location.href = "/";
@@ -357,13 +384,12 @@ function initActions(data) {
                 btn.disabled = false;
             }
         } catch (err) {
-            console.error("Save failed:", err);
+            console.error(err);
             btn.textContent = "❌ Erreur";
             btn.disabled = false;
         }
     });
 
-    // --- Edit button ---
     document.getElementById("btn-modifier").addEventListener("click", () => {
         if (data.slug) {
             window.location.href = `/evaluer?slug=${data.slug}`;

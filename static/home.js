@@ -65,6 +65,7 @@ function buildCard(evaluation) {
 
     const name = document.createElement("h2");
     name.textContent = evaluation.propertyName;
+    name.title = evaluation.propertyName;
     info.appendChild(name);
 
     if (evaluation.propertyPrice) {

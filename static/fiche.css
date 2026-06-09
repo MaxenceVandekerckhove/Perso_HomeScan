@@ -1,4 +1,8 @@
-/* ===== FICHE PAGE ===== */
+/* =========================================================
+   FICHE - DESIGN SYSTEM PROPRE (WEB + MOBILE)
+   ========================================================= */
+
+/* ===== HEADER ===== */
 
 .back-btn {
     color: white;
@@ -11,25 +15,26 @@
     opacity: 1;
 }
 
-
-/* ===== PROPERTY CARD ===== */
+/* ===== MAIN CARD ===== */
 
 .fiche-property-card {
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 24px;
     margin-bottom: 24px;
+
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+
     display: flex;
     gap: 24px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .fiche-photo {
     width: 180px;
     height: 130px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
     flex-shrink: 0;
 }
 
@@ -37,16 +42,28 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    min-width: 0;
 }
 
 .fiche-property-info h2 {
     font-size: 1.4rem;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    line-height: 1.3;
+    min-height: 2.8em;
 }
 
-.listing-link {
+.property-price {
+    font-size: 1.2rem;
+    font-weight: 600;
     color: #2c3e50;
-    font-size: 0.9rem;
 }
+
+/* ===== SCORE ===== */
 
 .global-score {
     margin-top: 8px;
@@ -59,24 +76,22 @@
 }
 
 .score-label {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #999;
-    margin-left: 4px;
 }
-
 
 /* ===== ALERTS ===== */
 
 .alerts-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
 }
 
 .alert-block {
-    border-radius: 8px;
-    padding: 16px 20px;
+    border-radius: 10px;
+    padding: 16px 18px;
 }
 
 .alert-block h3 {
@@ -93,43 +108,36 @@
 
 .alert-block li {
     display: flex;
-    align-items: center;
     gap: 8px;
     font-size: 0.88rem;
     flex-wrap: wrap;
 }
 
+/* COLORS */
+
 .alert-block-red {
     background: #fdf2f2;
     border: 1px solid #f5c6c6;
 }
-
 .alert-block-red h3 { color: #c0392b; }
-.alert-block-red .alert-famille { background: #fde8e8; color: #c0392b; }
-.alert-block-red .alert-value { color: #c0392b; }
 
 .alert-block-orange {
     background: #fef9f0;
     border: 1px solid #f9d9a0;
 }
-
 .alert-block-orange h3 { color: #d35400; }
-.alert-block-orange .alert-famille { background: #fef3e2; color: #d35400; }
-.alert-block-orange .alert-value { color: #d35400; }
 
 .alert-block-green {
     background: #f0faf0;
     border: 1px solid #a9dfbf;
 }
-
 .alert-block-green h3 { color: #1e8449; }
-.alert-block-green .alert-famille { background: #e8f8e8; color: #1e8449; }
-.alert-block-green .alert-value { color: #1e8449; }
 
 .alert-famille {
-    font-size: 0.78rem;
-    padding: 2px 7px;
-    border-radius: 12px;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
 }
 
 .alert-more {
@@ -138,15 +146,15 @@
     font-size: 0.82rem;
 }
 
-
 /* ===== FAMILY SCORES ===== */
 
 .family-scores-block {
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 20px 24px;
-    margin-bottom: 24px;
+
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
 }
 
 .family-scores-block h3 {
@@ -162,22 +170,21 @@
 
 .family-score-label {
     width: 220px;
-    font-size: 0.9rem;
     flex-shrink: 0;
+    font-size: 0.9rem;
 }
 
 .score-bar-wrapper {
     flex: 1;
+    height: 10px;
     background: #f0f0f0;
-    border-radius: 4px;
-    height: 12px;
+    border-radius: 6px;
     overflow: hidden;
 }
 
 .score-bar {
     height: 100%;
-    border-radius: 4px;
-    transition: width 0.4s ease;
+    transition: width 0.3s ease;
 }
 
 .family-score-value {
@@ -185,53 +192,55 @@
     text-align: right;
     font-size: 0.85rem;
     color: #555;
-    flex-shrink: 0;
 }
 
-
-/* ===== DETAIL SECTION ===== */
-
-.details-block {
-    background: white;
-    border-radius: 8px;
-    padding: 20px 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-}
+/* ===== DETAILS BLOCK ===== */
 
 .details-block h3 {
     margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.detail-famille:first-of-type {
+    margin-top: 8px;
+}
+
+.details-block {
+    background: white;
+    border-radius: 10px;
+    padding: 20px 24px;
+
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .detail-famille {
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 
 .detail-famille h4 {
     font-size: 1rem;
     font-weight: 700;
-    padding-bottom: 6px;
+
     border-bottom: 2px solid #2c3e50;
+    padding-bottom: 6px;
     margin-bottom: 12px;
 }
 
 .detail-categorie {
-    margin-bottom: 16px;
-    padding-left: 8px;
+    margin-bottom: 14px;
 }
 
-.detail-categorie h5 {
-    font-size: 0.9rem;
-    color: #555;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
+/* ===== ROW (VERSION STABLE) ===== */
 
 .detail-row {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 0;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 16px;
+    padding: 8px 0;
     border-bottom: 1px solid #f0f0f0;
+
     font-size: 0.9rem;
 }
 
@@ -240,17 +249,72 @@
 }
 
 .detail-label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
     flex: 1;
 }
 
 .detail-value {
+    flex-shrink: 0;
+    text-align: right;
+    white-space: nowrap;
     color: #555;
     font-size: 0.85rem;
-    text-align: right;
 }
+
+/* ===== BADGES ===== */
+
+.importance-badge {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* couleurs (IMPORTANT - tu les gardes) */
+
+.badge-redhibitoire { background: #fde8e8; color: #c0392b; }
+.badge-essentiel { background: #fef3e2; color: #d35400; }
+.badge-important { background: #fefde2; color: #b7950b; }
+.badge-bonus { background: #e8f8e8; color: #1e8449; }
+
+/* ===== PROPERTY PRICE ===== */
 
 .property-price {
     font-size: 1.2rem;
     font-weight: 600;
     color: #2c3e50;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 600px) {
+
+    .fiche-property-card {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .fiche-photo {
+        width: 100%;
+        height: 200px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .detail-value {
+        text-align: left;
+        white-space: normal;
+    }
+
+    .family-score-label {
+        width: 140px;
+    }
 }
