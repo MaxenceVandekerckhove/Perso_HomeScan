@@ -315,9 +315,22 @@ function scoreColor(percentage) {
 // ===== SAVE & EDIT ACTIONS =====
 
 function initActions(data) {
+    const btn = document.getElementById("btn-sauvegarder");
+
+    // If viewing a saved evaluation (has a slug in the URL), disable the save button
+    // until the user has made modifications (i.e. came back from the edit form)
+    const pathParts = window.location.pathname.split("/");
+    const slugInUrl = pathParts[2];
+    const comingFromForm = !!sessionStorage.getItem("logement-eval-result");
+
+    if (slugInUrl && !comingFromForm) {
+        // Viewing a saved fiche with no pending changes — disable save
+        btn.disabled = true;
+        btn.title = "Aucune modification à sauvegarder";
+    }
+
     // --- Save button ---
-    document.getElementById("btn-sauvegarder").addEventListener("click", async () => {
-        const btn = document.getElementById("btn-sauvegarder");
+    btn.addEventListener("click", async () => {
         btn.disabled = true;
         btn.textContent = "Sauvegarde…";
 
@@ -332,9 +345,13 @@ function initActions(data) {
 
             if (result.success) {
                 btn.textContent = "✅ Sauvegardé";
-                // Update the slug in data in case it was just created
                 data.slug = result.slug;
                 sessionStorage.setItem("logement-eval-slug", result.slug);
+                // Redirect to home after a short delay so the user sees the confirmation
+                setTimeout(() => {
+                    sessionStorage.removeItem("logement-eval-result");
+                    window.location.href = "/";
+                }, 800);
             } else {
                 btn.textContent = "❌ Erreur";
                 btn.disabled = false;
@@ -348,8 +365,6 @@ function initActions(data) {
 
     // --- Edit button ---
     document.getElementById("btn-modifier").addEventListener("click", () => {
-        // If the evaluation has a slug, redirect to the edit URL
-        // Otherwise go back to a blank form
         if (data.slug) {
             window.location.href = `/evaluer?slug=${data.slug}`;
         } else {
