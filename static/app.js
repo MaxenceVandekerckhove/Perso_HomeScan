@@ -34,15 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadCriteres() {
     try {
-        // Fetch the criteria data from our Flask API
         const response = await fetch("/api/criteres");
         const data = await response.json();
-
-        // Store the full data globally so other functions can access it later
         window.criteresData = data;
-
-        // Build the form from the loaded data
         buildForm(data);
+        prefillForm();
 
     } catch (error) {
         document.getElementById("form-container").innerHTML =
@@ -717,6 +713,7 @@ function collectFormData() {
                     label: critere.label,
                     importance: critere.importance,
                     displayValue,
+                    savedValue: value, 
                     obtained: counts ? obtained : null,
                     max: counts ? pointsMax : null
                 });
@@ -739,4 +736,68 @@ function collectFormData() {
 
     result.evaluatedCount = evaluatedCount;
     return result;
+}
+
+// ===== FORM PRE-FILL =====
+
+function prefillForm() {
+    // Check if there is evaluation data in sessionStorage.
+    // If so, pre-fill all form fields with the saved values.
+
+    const raw = sessionStorage.getItem("logement-eval-result");
+    if (!raw) return;
+
+    const data = JSON.parse(raw);
+
+    // --- Property header fields ---
+    if (data.propertyName) {
+        document.getElementById("property-name").value = data.propertyName;
+    }
+    if (data.propertyUrl) {
+        document.getElementById("property-url").value = data.propertyUrl;
+    }
+    if (data.propertyPrice) {
+        document.getElementById("property-price").value = data.propertyPrice;
+    }
+
+    // --- Photo preview ---
+    // If a photo was saved, re-display it from the evaluation folder
+    if (data.photoFilename && data.slug) {
+        const preview = document.getElementById("photo-preview");
+        const hint = document.getElementById("dropzone-hint");
+        preview.src = `/evaluations/${data.slug}/${data.photoFilename}`;
+        preview.style.display = "block";
+        hint.style.display = "none";
+    } else if (data.photoSrc) {
+        // Fall back to base64 if the photo hasn't been saved yet
+        const preview = document.getElementById("photo-preview");
+        const hint = document.getElementById("dropzone-hint");
+        preview.src = data.photoSrc;
+        preview.style.display = "block";
+        hint.style.display = "none";
+    }
+
+    // --- Criteria fields ---
+    // Loop through all families and set each input to its saved value
+    data.familles.forEach(famille => {
+        famille.categories.forEach(categorie => {
+            categorie.criteres.forEach(critere => {
+                if (!critere.displayValue || critere.displayValue === "Non évalué") return;
+
+                const input = document.getElementById(critere.id);
+                if (!input) return;
+
+                // Find the original saved value by matching the display value
+                // We stored the raw value in the critere object
+                if (critere.savedValue !== undefined) {
+                    input.value = critere.savedValue;
+                }
+            });
+        });
+    });
+
+    // Re-apply conditions and score after pre-filling
+    applyConditions();
+    applyAutoCompletions();
+    updateScoreDisplay();
 }
