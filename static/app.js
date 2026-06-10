@@ -591,16 +591,27 @@ function collectFormData() {
     // Only store photoSrc if a photo is actually displayed
     const photoPreview = document.getElementById("photo-preview");
     const photoSrcRaw = photoPreview.src || "";
-    // Only keep the src if it's a real image (base64 or saved file path)
-    const photoSrc = photoSrcRaw.startsWith("data:image") || photoSrcRaw.includes("/evaluations/")
-        ? photoSrcRaw
-        : null;
+
+    // If the photo is still the server-saved version (URL, not base64),
+    // pass back only the filename — no need to re-upload the image file.
+    const isExistingPhoto = photoSrcRaw.includes("/evaluations/");
+    const photoSrc = photoSrcRaw.startsWith("data:image")
+        ? photoSrcRaw      // new photo selected: send as base64
+        : isExistingPhoto
+            ? photoSrcRaw  // existing photo: keep the URL so fiche.js can display it
+            : null;
+
+    // Recover the saved filename and slug if available (set by prefillForm)
+    const photoFilename = photoPreview.dataset.photoFilename || null;
+    const existingSlug = photoPreview.dataset.photoSlug || null;
 
     const result = {
         propertyName: document.getElementById("property-name").value || "Bien sans nom",
         propertyUrl: document.getElementById("property-url").value || null,
         propertyPrice: document.getElementById("property-price").value || null,
         photoSrc: photoSrc,
+        photoFilename: photoFilename,
+        slug: existingSlug,
         score: calculateScore(),
         familles: [],
         formValues: {}, // flat map of all raw input values — used to pre-fill the form on edit
@@ -794,8 +805,11 @@ function prefillForm() {
         preview.src = `/evaluations/${data.slug}/${data.photoFilename}`;
         preview.style.display = "block";
         hint.style.display = "none";
+
+        preview.dataset.photoFilename = data.photoFilename;
+        preview.dataset.photoSlug = data.slug;
     } else if (data.photoSrc) {
-        // Photo not yet saved — use base64 from sessionStorage
+            // Photo not yet saved — use base64 from sessionStorage
         preview.src = data.photoSrc;
         preview.style.display = "block";
         hint.style.display = "none";
